@@ -63,6 +63,7 @@ const commandLoaders: Record<string, CommandLoader> = {
   ruvector: () => import('./ruvector/index.js'),
   // Beads Integration (git-backed task tracking)
   beads: () => import('./beads.js'),
+  beads: () => import('./beads.js'),
 };
 
 // Cache for loaded commands
