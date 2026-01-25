@@ -190,7 +190,10 @@ function generateHooksConfig(config: HooksConfig): object {
   }
 
   // PostToolUse hooks - cross-platform via npx with defensive guards
+  // These run async by default (Claude Code 2.1.0+) since they're for logging/metrics
+  // and don't need to block execution
   if (config.postToolUse) {
+    const postToolUseAsync = config.postToolUseAsync ?? true; // Default to async
     hooks.PostToolUse = [
       // File edit hooks with neural pattern training
       {
@@ -201,6 +204,7 @@ function generateHooksConfig(config: HooksConfig): object {
             command: '[ -n "$TOOL_INPUT_file_path" ] && npx @claude-flow/cli@latest hooks post-edit --file "$TOOL_INPUT_file_path" --success "${TOOL_SUCCESS:-true}" 2>/dev/null || true',
             timeout: config.timeout,
             continueOnError: true,
+            async: postToolUseAsync, // Run in background without blocking (Claude Code 2.1.0+)
           },
         ],
       },
@@ -213,6 +217,7 @@ function generateHooksConfig(config: HooksConfig): object {
             command: '[ -n "$TOOL_INPUT_command" ] && npx @claude-flow/cli@latest hooks post-command --command "$TOOL_INPUT_command" --success "${TOOL_SUCCESS:-true}" 2>/dev/null || true',
             timeout: config.timeout,
             continueOnError: true,
+            async: postToolUseAsync, // Run in background without blocking (Claude Code 2.1.0+)
           },
         ],
       },
@@ -225,6 +230,7 @@ function generateHooksConfig(config: HooksConfig): object {
             command: '[ -n "$TOOL_RESULT_agent_id" ] && npx @claude-flow/cli@latest hooks post-task --task-id "$TOOL_RESULT_agent_id" --success "${TOOL_SUCCESS:-true}" 2>/dev/null || true',
             timeout: config.timeout,
             continueOnError: true,
+            async: postToolUseAsync, // Run in background without blocking (Claude Code 2.1.0+)
           },
         ],
       },
@@ -248,6 +254,7 @@ function generateHooksConfig(config: HooksConfig): object {
   }
 
   // SessionStart for context loading and daemon auto-start
+  // Daemon start runs async (background) while session-restore runs sync (needs to complete before use)
   if (config.sessionStart) {
     hooks.SessionStart = [
       {
@@ -257,12 +264,14 @@ function generateHooksConfig(config: HooksConfig): object {
             command: 'npx @claude-flow/cli@latest daemon start --quiet 2>/dev/null || true',
             timeout: 5000,
             continueOnError: true,
+            async: true, // Daemon can start in background (Claude Code 2.1.0+)
           },
           {
             type: 'command',
             command: '[ -n "$SESSION_ID" ] && npx @claude-flow/cli@latest hooks session-restore --session-id "$SESSION_ID" 2>/dev/null || true',
             timeout: 10000,
             continueOnError: true,
+            // Session restore runs synchronously - we need context before continuing
           },
         ],
       },
@@ -286,7 +295,10 @@ function generateHooksConfig(config: HooksConfig): object {
   }
 
   // Notification hooks - store notifications in memory for swarm awareness
+  // These run async by default (Claude Code 2.1.0+) since they're pure side-effects
+  // and should never block execution
   if (config.notification) {
+    const notificationAsync = config.notificationAsync ?? true; // Default to async
     hooks.Notification = [
       {
         hooks: [
@@ -295,6 +307,7 @@ function generateHooksConfig(config: HooksConfig): object {
             command: '[ -n "$NOTIFICATION_MESSAGE" ] && npx @claude-flow/cli@latest memory store --namespace notifications --key "notify-$(date +%s)" --value "$NOTIFICATION_MESSAGE" 2>/dev/null || true',
             timeout: 3000,
             continueOnError: true,
+            async: notificationAsync, // Run in background without blocking (Claude Code 2.1.0+)
           },
         ],
       },
