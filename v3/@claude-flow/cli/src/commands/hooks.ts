@@ -3276,7 +3276,25 @@ const statuslineCommand: Command = {
     },
     {
       name: 'compact',
-      description: 'Compact single-line output',
+      description: 'Compact single-line output (deprecated, use --single-line)',
+      type: 'boolean',
+      default: false
+    },
+    {
+      name: 'single-line',
+      description: 'Single-line ASCII output for Claude Code statusLine (recommended)',
+      type: 'boolean',
+      default: false
+    },
+    {
+      name: 'safe',
+      description: 'Multi-line output with collision zone avoidance',
+      type: 'boolean',
+      default: false
+    },
+    {
+      name: 'emoji',
+      description: 'Include emojis in single-line output (may cause display issues)',
       type: 'boolean',
       default: false
     },
@@ -3289,8 +3307,10 @@ const statuslineCommand: Command = {
   ],
   examples: [
     { command: 'claude-flow hooks statusline', description: 'Display full statusline' },
-    { command: 'claude-flow hooks statusline --json', description: 'JSON output for hooks' },
-    { command: 'claude-flow hooks statusline --compact', description: 'Single-line status' }
+    { command: 'claude-flow hooks statusline --single-line', description: 'Single-line for Claude Code (recommended)' },
+    { command: 'claude-flow hooks statusline --safe', description: 'Multi-line with collision avoidance' },
+    { command: 'claude-flow hooks statusline --json', description: 'JSON output for scripting' },
+    { command: 'claude-flow hooks statusline --single-line --no-color', description: 'ASCII-only single-line' }
   ],
   action: async (ctx: CommandContext): Promise<CommandResult> => {
     const fs = await import('fs');
@@ -3515,10 +3535,129 @@ const statuslineCommand: Command = {
       return { success: true, data: statusData };
     }
 
-    // Compact output
+    // Single-line output for Claude Code statusLine (recommended)
+    // Uses ASCII-only symbols by default to avoid emoji width issues that cause character bleeding
+    if (ctx.flags['single-line'] || ctx.flags.singleLine) {
+      const noColor = ctx.flags['no-color'] || ctx.flags.noColor;
+      const useEmoji = ctx.flags.emoji;
+
+      // Use ASCII-safe symbols to avoid display width issues
+      const swarmIndicator = swarm.coordinationActive ? '*' : 'o';
+      const securityStatus = security.status === 'CLEAN' ? 'OK' :
+                             security.cvesFixed > 0 ? '~~' : 'XX';
+
+      // Color palette
+      const c = noColor ? {
+        reset: '', dim: '', cyan: '', yellow: '', green: '', red: '', brightPurple: ''
+      } : {
+        reset: '\x1b[0m', dim: '\x1b[2m', cyan: '\x1b[0;36m', yellow: '\x1b[0;33m',
+        green: '\x1b[0;32m', red: '\x1b[0;31m', brightPurple: '\x1b[1;35m'
+      };
+
+      const securityColor = security.status === 'CLEAN' ? c.green :
+                            security.cvesFixed > 0 ? c.yellow : c.red;
+
+      let line: string;
+      if (useEmoji) {
+        // With emojis (may cause display issues on some terminals)
+        const securityIcon = security.status === 'CLEAN' ? '✓' :
+                             security.cvesFixed > 0 ? '~' : '✗';
+        const segments = [
+          `${c.brightPurple}🤖 CF-V3${c.reset}`,
+          `${c.cyan}D:${progress.domainsCompleted}/${progress.totalDomains}${c.reset}`,
+          `${c.yellow}S:${swarm.coordinationActive ? '●' : '○'}${swarm.activeAgents}/${swarm.maxAgents}${c.reset}`,
+          `${securityColor}${securityIcon} CVE:${security.cvesFixed}/${security.totalCves}${c.reset}`,
+          `${c.dim}🧠${system.intelligencePct}%${c.reset}`,
+        ];
+        line = segments.join(` ${c.dim}|${c.reset} `);
+      } else {
+        // ASCII-only (recommended for Claude Code - avoids character bleeding)
+        const segments = [
+          `${c.brightPurple}CF-V3${c.reset}`,
+          `${c.cyan}D:${progress.domainsCompleted}/${progress.totalDomains}${c.reset}`,
+          `${c.yellow}S:${swarmIndicator}${swarm.activeAgents}/${swarm.maxAgents}${c.reset}`,
+          `${securityColor}CVE:${securityStatus} ${security.cvesFixed}/${security.totalCves}${c.reset}`,
+          `${c.dim}Int:${system.intelligencePct}%${c.reset}`,
+        ];
+        line = segments.join(` ${c.dim}|${c.reset} `);
+      }
+
+      output.writeln(line);
+      return { success: true, data: statusData };
+    }
+
+    // Compact output (deprecated, kept for backward compatibility)
     if (ctx.flags.compact) {
       const line = `DDD:${progress.domainsCompleted}/${progress.totalDomains} CVE:${security.cvesFixed}/${security.totalCves} Swarm:${swarm.activeAgents}/${swarm.maxAgents} Ctx:${system.contextPct}% Int:${system.intelligencePct}%`;
       output.writeln(line);
+      return { success: true, data: statusData };
+    }
+
+    // Safe multi-line output with collision zone avoidance
+    // Adds padding to avoid Claude Code's internal status position (cols 15-25)
+    if (ctx.flags.safe) {
+      const noColor = ctx.flags['no-color'] || ctx.flags.noColor;
+      const c = noColor ? {
+        reset: '', bold: '', dim: '', red: '', green: '', yellow: '', blue: '',
+        purple: '', cyan: '', brightRed: '', brightGreen: '', brightYellow: '',
+        brightBlue: '', brightPurple: '', brightCyan: '', brightWhite: ''
+      } : {
+        reset: '\x1b[0m', bold: '\x1b[1m', dim: '\x1b[2m', red: '\x1b[0;31m',
+        green: '\x1b[0;32m', yellow: '\x1b[0;33m', blue: '\x1b[0;34m',
+        purple: '\x1b[0;35m', cyan: '\x1b[0;36m', brightRed: '\x1b[1;31m',
+        brightGreen: '\x1b[1;32m', brightYellow: '\x1b[1;33m', brightBlue: '\x1b[1;34m',
+        brightPurple: '\x1b[1;35m', brightCyan: '\x1b[1;36m', brightWhite: '\x1b[1;37m'
+      };
+
+      // Header
+      let header = `${c.bold}${c.brightPurple}| Claude Flow V3 ${c.reset}`;
+      header += `${swarm.coordinationActive ? c.brightCyan : c.dim}* ${c.brightCyan}${user.name}${c.reset}`;
+      if (user.gitBranch) {
+        header += `  ${c.dim}|${c.reset}  ${c.brightBlue}@ ${user.gitBranch}${c.reset}`;
+      }
+      header += `  ${c.dim}|${c.reset}  ${c.purple}${user.modelName}${c.reset}`;
+      output.writeln(header);
+
+      // Separator
+      output.writeln(`${c.dim}-----------------------------------------------------${c.reset}`);
+
+      // DDD Progress line
+      const filled = Math.round((progress.domainsCompleted / progress.totalDomains) * 5);
+      const empty = 5 - filled;
+      const progressBar = '[' + '#'.repeat(filled) + '-'.repeat(empty) + ']';
+      const domainsColor = progress.domainsCompleted >= 3 ? c.brightGreen : progress.domainsCompleted > 0 ? c.yellow : c.red;
+      output.writeln(
+        `${c.brightCyan}DDD Domains${c.reset}    ${progressBar}  ` +
+        `${domainsColor}${progress.domainsCompleted}${c.reset}/${c.brightWhite}${progress.totalDomains}${c.reset}    ` +
+        `${c.brightYellow}target: 150x-12500x${c.reset}`
+      );
+
+      // COLLISION ZONE LINE: Add 26-char padding at start to push content past cols 15-25
+      // Format: "[robot]                          [rest of content]"
+      const swarmIndicator = swarm.coordinationActive ? `${c.brightGreen}*${c.reset}` : `${c.dim}o${c.reset}`;
+      const agentsColor = swarm.activeAgents > 0 ? c.brightGreen : c.red;
+      const securityIcon = security.status === 'CLEAN' ? '+' : security.cvesFixed > 0 ? '~' : 'X';
+      const securityColor = security.status === 'CLEAN' ? c.brightGreen : security.cvesFixed > 0 ? c.brightYellow : c.brightRed;
+      const memoryColor = system.memoryMB > 0 ? c.brightCyan : c.dim;
+      const memoryDisplay = system.memoryMB > 0 ? `${system.memoryMB}MB` : '--';
+
+      // 26 spaces after [S] to push past collision zone (cols 15-25)
+      output.writeln(
+        `${c.brightYellow}[S]${c.reset}                          ` +
+        `${swarmIndicator} [${agentsColor}${String(swarm.activeAgents).padStart(2)}${c.reset}/${c.brightWhite}${swarm.maxAgents}${c.reset}]  ` +
+        `${securityColor}${securityIcon} CVE ${security.cvesFixed}${c.reset}/${c.brightWhite}${security.totalCves}${c.reset}    ` +
+        `${memoryColor}Mem ${memoryDisplay}${c.reset}    ` +
+        `${c.dim}Int ${String(system.intelligencePct).padStart(3)}%${c.reset}`
+      );
+
+      // Architecture line (last line - safe from collision)
+      const dddColor = progress.dddProgress >= 50 ? c.brightGreen : progress.dddProgress > 0 ? c.yellow : c.red;
+      output.writeln(
+        `${c.brightPurple}Architecture${c.reset}    ` +
+        `${c.cyan}DDD${c.reset} ${dddColor}*${String(progress.dddProgress).padStart(3)}%${c.reset}  ${c.dim}|${c.reset}  ` +
+        `${c.cyan}Security${c.reset} ${securityColor}*${security.status}${c.reset}`
+      );
+
       return { success: true, data: statusData };
     }
 

@@ -84,6 +84,188 @@ const colors = {
 };
 
 /**
+ * No-color variant for terminals that don't support ANSI
+ */
+const noColors: typeof colors = {
+  reset: '',
+  bold: '',
+  dim: '',
+  red: '',
+  green: '',
+  yellow: '',
+  blue: '',
+  purple: '',
+  cyan: '',
+  brightRed: '',
+  brightGreen: '',
+  brightYellow: '',
+  brightBlue: '',
+  brightPurple: '',
+  brightCyan: '',
+  brightWhite: '',
+};
+
+/**
+ * Display width utilities for proper terminal rendering
+ *
+ * Problem: Terminal cursor positioning is based on display width, not string length.
+ * - ANSI escape codes have 0 display width but contribute to string.length
+ * - Emojis typically have display width of 2 but string.length varies (1-4 due to UTF-16)
+ * - Some Unicode symbols (●, ○, ▊, ⎇) may have variable widths across terminals
+ *
+ * This causes "character bleeding" when the terminal miscalculates cursor position.
+ */
+
+/**
+ * Strip ANSI escape codes from a string
+ */
+export function stripAnsi(str: string): string {
+  // eslint-disable-next-line no-control-regex
+  return str.replace(/\x1b\[[0-9;]*m/g, '');
+}
+
+/**
+ * Check if a character is an emoji
+ * Covers most common emoji ranges including:
+ * - Emoticons (1F600-1F64F)
+ * - Symbols & Pictographs (1F300-1F5FF)
+ * - Transport & Map (1F680-1F6FF)
+ * - Supplemental Symbols (1F900-1F9FF)
+ * - Flags (1F1E0-1F1FF)
+ */
+function isEmoji(char: string): boolean {
+  const codePoint = char.codePointAt(0) ?? 0;
+  return (
+    (codePoint >= 0x1F300 && codePoint <= 0x1F9FF) || // Misc Symbols, Emoticons, etc.
+    (codePoint >= 0x2600 && codePoint <= 0x26FF) ||   // Misc Symbols (☀, ⚡, etc.)
+    (codePoint >= 0x2700 && codePoint <= 0x27BF) ||   // Dingbats
+    (codePoint >= 0x1F1E0 && codePoint <= 0x1F1FF) || // Flags
+    (codePoint >= 0xFE00 && codePoint <= 0xFE0F) ||   // Variation Selectors
+    (codePoint >= 0x200D && codePoint <= 0x200D)      // Zero Width Joiner
+  );
+}
+
+/**
+ * Check if a character is a wide East Asian character
+ */
+function isWideChar(char: string): boolean {
+  const codePoint = char.codePointAt(0) ?? 0;
+  // Common wide characters
+  return (
+    (codePoint >= 0x1100 && codePoint <= 0x115F) ||   // Hangul Jamo
+    (codePoint >= 0x2E80 && codePoint <= 0x9FFF) ||   // CJK
+    (codePoint >= 0xAC00 && codePoint <= 0xD7A3) ||   // Hangul Syllables
+    (codePoint >= 0xF900 && codePoint <= 0xFAFF) ||   // CJK Compatibility
+    (codePoint >= 0xFE10 && codePoint <= 0xFE1F) ||   // Vertical Forms
+    (codePoint >= 0xFF00 && codePoint <= 0xFF60) ||   // Fullwidth Forms
+    (codePoint >= 0xFFE0 && codePoint <= 0xFFE6)      // Fullwidth Signs
+  );
+}
+
+/**
+ * Calculate the display width of a string
+ * Takes into account ANSI codes (0 width), emojis (2 width), and regular chars (1 width)
+ *
+ * @param str - The string to measure
+ * @returns The visual display width in terminal columns
+ */
+export function getDisplayWidth(str: string): number {
+  const stripped = stripAnsi(str);
+  let width = 0;
+
+  // Use Array.from to properly iterate over Unicode code points
+  const chars = Array.from(stripped);
+
+  for (let i = 0; i < chars.length; i++) {
+    const char = chars[i];
+
+    // Skip variation selectors (they modify previous emoji)
+    const codePoint = char.codePointAt(0) ?? 0;
+    if (codePoint >= 0xFE00 && codePoint <= 0xFE0F) {
+      continue;
+    }
+
+    // Skip zero-width joiner
+    if (codePoint === 0x200D) {
+      continue;
+    }
+
+    if (isEmoji(char) || isWideChar(char)) {
+      width += 2;
+    } else {
+      width += 1;
+    }
+  }
+
+  return width;
+}
+
+/**
+ * Pad a string to a specific display width
+ * Accounts for ANSI codes and wide characters
+ *
+ * @param str - The string to pad
+ * @param targetWidth - The target display width
+ * @param padChar - Character to use for padding (default: space)
+ * @param align - Alignment: 'left', 'right', or 'center' (default: 'left')
+ */
+export function padToWidth(
+  str: string,
+  targetWidth: number,
+  padChar = ' ',
+  align: 'left' | 'right' | 'center' = 'left'
+): string {
+  const currentWidth = getDisplayWidth(str);
+  const padNeeded = Math.max(0, targetWidth - currentWidth);
+
+  if (padNeeded === 0) return str;
+
+  const padding = padChar.repeat(padNeeded);
+
+  switch (align) {
+    case 'right':
+      return padding + str;
+    case 'center':
+      const leftPad = Math.floor(padNeeded / 2);
+      const rightPad = padNeeded - leftPad;
+      return padChar.repeat(leftPad) + str + padChar.repeat(rightPad);
+    default:
+      return str + padding;
+  }
+}
+
+/**
+ * Truncate a string to a maximum display width
+ * Accounts for ANSI codes and wide characters
+ *
+ * @param str - The string to truncate
+ * @param maxWidth - Maximum display width
+ * @param suffix - Suffix to add when truncated (default: '…')
+ */
+export function truncateToWidth(str: string, maxWidth: number, suffix = '…'): string {
+  const suffixWidth = getDisplayWidth(suffix);
+  if (getDisplayWidth(str) <= maxWidth) return str;
+
+  const stripped = stripAnsi(str);
+  const chars = Array.from(stripped);
+  let width = 0;
+  let result = '';
+
+  for (const char of chars) {
+    const charWidth = isEmoji(char) || isWideChar(char) ? 2 : 1;
+
+    if (width + charWidth + suffixWidth > maxWidth) {
+      return result + suffix;
+    }
+
+    result += char;
+    width += charWidth;
+  }
+
+  return result;
+}
+
+/**
  * Statusline Generator
  */
 export class StatuslineGenerator {
@@ -254,26 +436,82 @@ export class StatuslineGenerator {
    * This avoids the multi-line collision bug where Claude Code's internal status
    * (written at absolute terminal coordinates ~cols 15-25) bleeds into conversation
    *
+   * Uses ASCII-safe symbols to avoid emoji width issues that cause character bleeding.
+   * Format: CF-V3 | D:3/5 | S:*2/15 | CVE:OK 3/3 | Int:12%
+   *
+   * @param useColor - Whether to use ANSI colors (default: true)
    * @see https://github.com/ruvnet/claude-flow/issues/985
    */
-  generateSingleLine(): string {
+  generateSingleLine(useColor = true): string {
     if (!this.config.enabled) {
       return '';
     }
 
     const data = this.generateData();
-    const c = colors;
+    const c = useColor ? colors : noColors;
+
+    // Use ASCII-only symbols to avoid display width issues with emojis
+    // Emojis have inconsistent widths (1-2 columns) across terminals
+    const swarmIndicator = data.swarm.coordinationActive ? '*' : 'o';
+    const securityStatus = data.security.status === 'CLEAN' ? 'OK' :
+                           data.security.cvesFixed > 0 ? '~~' : 'XX';
+    const securityColor = data.security.status === 'CLEAN' ? c.green :
+                          data.security.cvesFixed > 0 ? c.yellow : c.red;
+
+    // Format: CF-V3 | D:3/5 | S:*2/15 | CVE:OK 3/3 | Int:12%
+    // Each segment uses consistent ASCII characters for predictable display width
+    const segments = [
+      `${c.brightPurple}CF-V3${c.reset}`,
+      `${c.cyan}D:${data.v3Progress.domainsCompleted}/${data.v3Progress.totalDomains}${c.reset}`,
+      `${c.yellow}S:${swarmIndicator}${data.swarm.activeAgents}/${data.swarm.maxAgents}${c.reset}`,
+      `${securityColor}CVE:${securityStatus} ${data.security.cvesFixed}/${data.security.totalCves}${c.reset}`,
+      `${c.dim}Int:${data.system.intelligencePct}%${c.reset}`,
+    ];
+
+    return segments.join(` ${c.dim}|${c.reset} `);
+  }
+
+  /**
+   * Generate single-line output with emojis (for terminals that support them well)
+   * Use this only when you know the terminal handles emoji width correctly.
+   *
+   * Format: 🤖 CF-V3 | D:3/5 | S:●2/15 | ✓ CVE:3/3 | 🧠12%
+   *
+   * @param useColor - Whether to use ANSI colors (default: true)
+   */
+  generateSingleLineWithEmoji(useColor = true): string {
+    if (!this.config.enabled) {
+      return '';
+    }
+
+    const data = this.generateData();
+    const c = useColor ? colors : noColors;
 
     const swarmIndicator = data.swarm.coordinationActive ? '●' : '○';
-    const securityStatus = data.security.status === 'CLEAN' ? '✓' :
-                           data.security.cvesFixed > 0 ? '~' : '✗';
+    const securityIcon = data.security.status === 'CLEAN' ? '✓' :
+                         data.security.cvesFixed > 0 ? '~' : '✗';
+    const securityColor = data.security.status === 'CLEAN' ? c.green :
+                          data.security.cvesFixed > 0 ? c.yellow : c.red;
 
-    // Single line format: CF-V3 | D:3/5 | S:●2/15 | CVE:✓3/3 | 🧠12%
-    return `${c.brightPurple}CF-V3${c.reset} ${c.dim}|${c.reset} ` +
-      `${c.cyan}D:${data.v3Progress.domainsCompleted}/${data.v3Progress.totalDomains}${c.reset} ${c.dim}|${c.reset} ` +
-      `${c.yellow}S:${swarmIndicator}${data.swarm.activeAgents}/${data.swarm.maxAgents}${c.reset} ${c.dim}|${c.reset} ` +
-      `${data.security.status === 'CLEAN' ? c.green : c.red}CVE:${securityStatus}${data.security.cvesFixed}/${data.security.totalCves}${c.reset} ${c.dim}|${c.reset} ` +
-      `${c.dim}🧠${data.system.intelligencePct}%${c.reset}`;
+    const segments = [
+      `${c.brightPurple}🤖 CF-V3${c.reset}`,
+      `${c.cyan}D:${data.v3Progress.domainsCompleted}/${data.v3Progress.totalDomains}${c.reset}`,
+      `${c.yellow}S:${swarmIndicator}${data.swarm.activeAgents}/${data.swarm.maxAgents}${c.reset}`,
+      `${securityColor}${securityIcon} CVE:${data.security.cvesFixed}/${data.security.totalCves}${c.reset}`,
+      `${c.dim}🧠${data.system.intelligencePct}%${c.reset}`,
+    ];
+
+    return segments.join(` ${c.dim}|${c.reset} `);
+  }
+
+  /**
+   * Generate single-line output with no colors and ASCII-only characters
+   * This is the safest option for maximum compatibility across all terminals.
+   *
+   * Format: CF-V3 | D:3/5 | S:*2/15 | CVE:OK 3/3 | Int:12%
+   */
+  generateSingleLineAscii(): string {
+    return this.generateSingleLine(false);
   }
 
   /**

@@ -64,6 +64,11 @@ export {
   createShellStatusline,
   parseStatuslineData,
   defaultStatuslineGenerator,
+  // Display width utilities for proper terminal rendering
+  stripAnsi,
+  getDisplayWidth,
+  padToWidth,
+  truncateToWidth,
 } from './statusline/index.js';
 
 // MCP Tools
