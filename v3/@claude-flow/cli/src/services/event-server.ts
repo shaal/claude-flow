@@ -511,14 +511,13 @@ export class EventServer extends EventEmitter {
             }
 
             // Broadcast to all WebSocket clients
-            // Send in format dashboard expects: { type: 'agent:status', channel: 'agents', ...eventData }
+            // Send in format dashboard expects: { channel: 'agents', event: 'agent:spawned', data: {...} }
             const eventData = event || data;
             const message = {
-              type,
-              channel,
-              payload: eventData,
+              channel,                              // e.g., 'agents'
+              event: type,                          // e.g., 'agent:spawned' - dashboard reads wsEvent.event
+              data: eventData,                      // dashboard reads wsEvent.data
               timestamp: eventData.timestamp || Date.now(),
-              ...eventData, // Spread event fields at top level for compatibility
             };
 
             // Use broadcastRaw to send directly without wrapping

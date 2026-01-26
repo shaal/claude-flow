@@ -615,20 +615,14 @@ const useWebSocket = () => {
             connect();
           }, delay);
         } else {
-          console.log('Max reconnection attempts reached');
-          // Load demo data as fallback after max retries
-          if (!hasReceivedDataRef.current) {
-            loadDemoData();
-          }
+          console.log('Max reconnection attempts reached - waiting for real data');
+          // Demo data loading disabled - dashboard shows only real swarm data
         }
       };
     } catch (error) {
       console.error('Failed to create WebSocket:', error);
       setConnectionStatus('error', 'Failed to connect');
-      // Load demo data as fallback
-      if (!hasReceivedDataRef.current) {
-        loadDemoData();
-      }
+      // Demo data loading disabled - dashboard shows only real swarm data
     }
   }, [setConnectionStatus, handleMessage, subscribeToChannels, loadDemoData]);
 
@@ -670,15 +664,11 @@ const App: React.FC = () => {
   // Track if demo data has been loaded
   const demoDataLoadedRef = useRef(false);
 
-  // Connect to WebSocket on mount, load demo data as initial fallback
+  // Connect to WebSocket on mount - NO demo data, wait for real events
   useEffect(() => {
-    // Load demo data initially while attempting connection
-    if (!demoDataLoadedRef.current) {
-      demoDataLoadedRef.current = true;
-      getDemoAgents().forEach((agent) => addAgent(agent));
-      getDemoTasks().forEach((task) => addTask(task));
-      getDemoMessages().forEach((msg) => addMessage(msg));
-    }
+    // Skip demo data loading - only show real data from WebSocket
+    // Demo data disabled to show actual swarm activity
+    demoDataLoadedRef.current = true;
 
     // Attempt WebSocket connection
     connect();
