@@ -1,0 +1,33 @@
+{
+  "ci": {
+    "collect": {
+      "staticDistDir": "./dist",
+      "numberOfRuns": 3,
+      "settings": {
+        "preset": "desktop",
+        "throttling": {
+          "cpuSlowdownMultiplier": 1
+        }
+      }
+    },
+    "assert": {
+      "assertions": {
+        "categories:performance": ["error", { "minScore": 0.9 }],
+        "categories:accessibility": ["error", { "minScore": 0.9 }],
+        "categories:best-practices": ["warn", { "minScore": 0.85 }],
+        "categories:seo": ["warn", { "minScore": 0.85 }],
+        "first-contentful-paint": ["warn", { "maxNumericValue": 2000 }],
+        "largest-contentful-paint": ["warn", { "maxNumericValue": 3000 }],
+        "cumulative-layout-shift": ["warn", { "maxNumericValue": 0.1 }],
+        "total-blocking-time": ["warn", { "maxNumericValue": 500 }],
+        "interactive": ["warn", { "maxNumericValue": 4000 }],
+        "resource-summary:script:size": ["warn", { "maxNumericValue": 250000 }],
+        "resource-summary:stylesheet:size": ["warn", { "maxNumericValue": 75000 }],
+        "resource-summary:total:size": ["warn", { "maxNumericValue": 500000 }]
+      }
+    },
+    "upload": {
+      "target": "temporary-public-storage"
+    }
+  }
+}

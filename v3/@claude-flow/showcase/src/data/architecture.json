@@ -1,0 +1,163 @@
+{
+  "version": "3.0.0-alpha",
+  "modules": [
+    {
+      "id": "cli",
+      "name": "@claude-flow/cli",
+      "type": "module",
+      "description": "26 commands, 140+ subcommands",
+      "lines": 629,
+      "technologies": [
+        { "name": "TypeScript", "version": "5.3+", "purpose": "Type-safe CLI", "icon": "typescript", "docUrl": "https://typescriptlang.org" },
+        { "name": "Commander.js", "version": "12.0", "purpose": "CLI framework", "icon": "terminal", "docUrl": "https://github.com/tj/commander.js" }
+      ],
+      "connections": ["memory", "swarm", "mcp", "hooks"],
+      "category": "core"
+    },
+    {
+      "id": "memory",
+      "name": "@claude-flow/memory",
+      "type": "module",
+      "description": "AgentDB with HNSW indexing",
+      "lines": 2400,
+      "technologies": [
+        { "name": "SQLite", "version": "3.45", "purpose": "Persistent storage", "icon": "database", "docUrl": "https://sqlite.org" },
+        { "name": "HNSW", "version": "1.0", "purpose": "Vector indexing", "icon": "search", "docUrl": "https://github.com/nmslib/hnswlib" }
+      ],
+      "connections": ["embeddings", "neural"],
+      "category": "core"
+    },
+    {
+      "id": "swarm",
+      "name": "@claude-flow/swarm",
+      "type": "module",
+      "description": "Multi-agent coordination",
+      "lines": 1800,
+      "technologies": [
+        { "name": "Raft", "version": "1.0", "purpose": "Consensus", "icon": "network", "docUrl": "https://raft.github.io" },
+        { "name": "Byzantine", "version": "1.0", "purpose": "Fault tolerance", "icon": "shield", "docUrl": "" }
+      ],
+      "connections": ["agents", "hive-mind", "memory"],
+      "category": "coordination"
+    },
+    {
+      "id": "mcp",
+      "name": "@claude-flow/mcp",
+      "type": "service",
+      "description": "MCP server with 50+ tools",
+      "lines": 1200,
+      "technologies": [
+        { "name": "MCP Protocol", "version": "1.0", "purpose": "Tool protocol", "icon": "plug", "docUrl": "https://modelcontextprotocol.io" },
+        { "name": "JSON-RPC", "version": "2.0", "purpose": "Transport", "icon": "code", "docUrl": "" }
+      ],
+      "connections": ["cli", "agents"],
+      "category": "integration"
+    },
+    {
+      "id": "hooks",
+      "name": "@claude-flow/hooks",
+      "type": "module",
+      "description": "17 hooks + 12 workers",
+      "lines": 950,
+      "technologies": [
+        { "name": "Event System", "version": "1.0", "purpose": "Hook dispatch", "icon": "zap", "docUrl": "" }
+      ],
+      "connections": ["cli", "neural", "daemon"],
+      "category": "core"
+    },
+    {
+      "id": "neural",
+      "name": "@claude-flow/neural",
+      "type": "module",
+      "description": "RuVector intelligence",
+      "lines": 2100,
+      "technologies": [
+        { "name": "SONA", "version": "1.0", "purpose": "Self-optimization", "icon": "brain", "docUrl": "" },
+        { "name": "MoE", "version": "1.0", "purpose": "Expert routing", "icon": "git-branch", "docUrl": "" }
+      ],
+      "connections": ["memory", "embeddings"],
+      "category": "intelligence"
+    },
+    {
+      "id": "embeddings",
+      "name": "@claude-flow/embeddings",
+      "type": "module",
+      "description": "Vector embeddings (75x faster)",
+      "lines": 800,
+      "technologies": [
+        { "name": "ONNX", "version": "1.17", "purpose": "Inference", "icon": "cpu", "docUrl": "https://onnx.ai" },
+        { "name": "Poincare", "version": "1.0", "purpose": "Hyperbolic", "icon": "circle", "docUrl": "" }
+      ],
+      "connections": ["memory", "neural"],
+      "category": "intelligence"
+    },
+    {
+      "id": "agents",
+      "name": "@claude-flow/agents",
+      "type": "module",
+      "description": "60+ agent types",
+      "lines": 1500,
+      "technologies": [
+        { "name": "Agent Protocol", "version": "1.0", "purpose": "Agent interface", "icon": "users", "docUrl": "" }
+      ],
+      "connections": ["swarm", "mcp", "memory"],
+      "category": "agents"
+    },
+    {
+      "id": "hive-mind",
+      "name": "@claude-flow/hive-mind",
+      "type": "module",
+      "description": "Queen-led consensus",
+      "lines": 1100,
+      "technologies": [
+        { "name": "CRDT", "version": "1.0", "purpose": "Conflict-free sync", "icon": "refresh", "docUrl": "" }
+      ],
+      "connections": ["swarm", "agents"],
+      "category": "coordination"
+    },
+    {
+      "id": "security",
+      "name": "@claude-flow/security",
+      "type": "module",
+      "description": "CVE scanning, input validation",
+      "lines": 750,
+      "technologies": [
+        { "name": "Zod", "version": "3.22", "purpose": "Validation", "icon": "shield", "docUrl": "https://zod.dev" },
+        { "name": "bcrypt", "version": "5.1", "purpose": "Hashing", "icon": "lock", "docUrl": "" }
+      ],
+      "connections": ["cli", "agents"],
+      "category": "security"
+    },
+    {
+      "id": "daemon",
+      "name": "@claude-flow/daemon",
+      "type": "service",
+      "description": "Background workers",
+      "lines": 600,
+      "technologies": [
+        { "name": "Node.js Worker", "version": "20+", "purpose": "Background processing", "icon": "activity", "docUrl": "" }
+      ],
+      "connections": ["hooks", "memory"],
+      "category": "infrastructure"
+    }
+  ],
+  "connections": [
+    { "id": "cli-memory", "from": "cli", "to": "memory", "type": "uses" },
+    { "id": "cli-swarm", "from": "cli", "to": "swarm", "type": "uses" },
+    { "id": "cli-mcp", "from": "cli", "to": "mcp", "type": "uses" },
+    { "id": "cli-hooks", "from": "cli", "to": "hooks", "type": "uses" },
+    { "id": "memory-embeddings", "from": "memory", "to": "embeddings", "type": "uses" },
+    { "id": "memory-neural", "from": "memory", "to": "neural", "type": "uses" },
+    { "id": "swarm-agents", "from": "swarm", "to": "agents", "type": "uses" },
+    { "id": "swarm-hive", "from": "swarm", "to": "hive-mind", "type": "uses" },
+    { "id": "swarm-memory", "from": "swarm", "to": "memory", "type": "uses" },
+    { "id": "neural-embeddings", "from": "neural", "to": "embeddings", "type": "uses" },
+    { "id": "agents-mcp", "from": "agents", "to": "mcp", "type": "uses" },
+    { "id": "agents-memory", "from": "agents", "to": "memory", "type": "uses" },
+    { "id": "hooks-neural", "from": "hooks", "to": "neural", "type": "uses" },
+    { "id": "hooks-daemon", "from": "hooks", "to": "daemon", "type": "uses" },
+    { "id": "security-cli", "from": "security", "to": "cli", "type": "uses" },
+    { "id": "security-agents", "from": "security", "to": "agents", "type": "uses" },
+    { "id": "daemon-memory", "from": "daemon", "to": "memory", "type": "uses" }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "total": 60,
+  "categories": [
+    {
+      "id": "core",
+      "name": "Core Development",
+      "agents": [
+        { "id": "coder", "type": "coder", "role": "Code Implementation", "capabilities": ["code-generation", "refactoring", "bug-fixing"], "status": "active", "connections": [{ "targetId": "reviewer", "type": "reports" }] },
+        { "id": "reviewer", "type": "reviewer", "role": "Code Review", "capabilities": ["code-review", "security-check", "best-practices"], "status": "active", "connections": [{ "targetId": "coder", "type": "coordinates" }] },
+        { "id": "tester", "type": "tester", "role": "Test Writing", "capabilities": ["unit-tests", "integration-tests", "coverage"], "status": "idle", "connections": [{ "targetId": "coder", "type": "coordinates" }] },
+        { "id": "planner", "type": "planner", "role": "Task Planning", "capabilities": ["decomposition", "prioritization", "scheduling"], "status": "active", "connections": [{ "targetId": "coder", "type": "delegates" }] },
+        { "id": "researcher", "type": "researcher", "role": "Research & Analysis", "capabilities": ["code-analysis", "pattern-detection", "documentation"], "status": "idle", "connections": [] }
+      ]
+    },
+    {
+      "id": "specialized",
+      "name": "V3 Specialized",
+      "agents": [
+        { "id": "security-architect", "type": "security-architect", "role": "Security Architecture", "capabilities": ["threat-modeling", "security-design", "compliance"], "status": "active", "connections": [{ "targetId": "security-auditor", "type": "coordinates" }] },
+        { "id": "security-auditor", "type": "security-auditor", "role": "Security Audit", "capabilities": ["vulnerability-scan", "cve-check", "penetration-test"], "status": "busy", "connections": [] },
+        { "id": "memory-specialist", "type": "memory-specialist", "role": "Memory Optimization", "capabilities": ["memory-profiling", "leak-detection", "optimization"], "status": "idle", "connections": [] },
+        { "id": "performance-engineer", "type": "performance-engineer", "role": "Performance Tuning", "capabilities": ["profiling", "benchmarking", "optimization"], "status": "active", "connections": [] }
+      ]
+    },
+    {
+      "id": "coordination",
+      "name": "Swarm Coordination",
+      "agents": [
+        { "id": "hierarchical-coordinator", "type": "hierarchical-coordinator", "role": "Hierarchical Lead", "capabilities": ["task-distribution", "coordination", "monitoring"], "status": "active", "connections": [{ "targetId": "mesh-coordinator", "type": "coordinates" }] },
+        { "id": "mesh-coordinator", "type": "mesh-coordinator", "role": "Mesh Network", "capabilities": ["peer-coordination", "load-balancing", "failover"], "status": "active", "connections": [] },
+        { "id": "adaptive-coordinator", "type": "adaptive-coordinator", "role": "Adaptive Strategy", "capabilities": ["dynamic-routing", "topology-switch", "optimization"], "status": "idle", "connections": [] },
+        { "id": "swarm-memory-manager", "type": "swarm-memory-manager", "role": "Shared Memory", "capabilities": ["memory-sync", "conflict-resolution", "caching"], "status": "active", "connections": [] }
+      ]
+    },
+    {
+      "id": "consensus",
+      "name": "Consensus & Distributed",
+      "agents": [
+        { "id": "byzantine-coordinator", "type": "byzantine-coordinator", "role": "BFT Consensus", "capabilities": ["byzantine-fault-tolerance", "voting", "agreement"], "status": "active", "connections": [] },
+        { "id": "raft-manager", "type": "raft-manager", "role": "Raft Leader", "capabilities": ["leader-election", "log-replication", "commitment"], "status": "active", "connections": [] },
+        { "id": "gossip-coordinator", "type": "gossip-coordinator", "role": "Gossip Protocol", "capabilities": ["eventual-consistency", "epidemic-spread", "failure-detection"], "status": "idle", "connections": [] },
+        { "id": "crdt-synchronizer", "type": "crdt-synchronizer", "role": "CRDT Sync", "capabilities": ["conflict-free-merge", "state-sync", "ordering"], "status": "active", "connections": [] }
+      ]
+    },
+    {
+      "id": "github",
+      "name": "GitHub & Repository",
+      "agents": [
+        { "id": "pr-manager", "type": "pr-manager", "role": "PR Management", "capabilities": ["pr-creation", "review-request", "merge"], "status": "active", "connections": [] },
+        { "id": "code-review-swarm", "type": "code-review-swarm", "role": "Automated Review", "capabilities": ["multi-agent-review", "consensus-review", "feedback"], "status": "idle", "connections": [] },
+        { "id": "issue-tracker", "type": "issue-tracker", "role": "Issue Management", "capabilities": ["issue-triage", "labeling", "assignment"], "status": "active", "connections": [] },
+        { "id": "release-manager", "type": "release-manager", "role": "Release Automation", "capabilities": ["versioning", "changelog", "deployment"], "status": "idle", "connections": [] }
+      ]
+    },
+    {
+      "id": "sparc",
+      "name": "SPARC Methodology",
+      "agents": [
+        { "id": "sparc-coord", "type": "sparc-coord", "role": "SPARC Orchestrator", "capabilities": ["methodology-coordination", "phase-management", "quality-gates"], "status": "active", "connections": [{ "targetId": "specification", "type": "delegates" }] },
+        { "id": "specification", "type": "specification", "role": "Spec Writer", "capabilities": ["requirements", "user-stories", "acceptance-criteria"], "status": "idle", "connections": [] },
+        { "id": "pseudocode", "type": "pseudocode", "role": "Algorithm Design", "capabilities": ["algorithm-design", "pseudocode", "logic-flow"], "status": "idle", "connections": [] },
+        { "id": "architecture", "type": "architecture", "role": "System Design", "capabilities": ["system-design", "component-design", "integration"], "status": "active", "connections": [] }
+      ]
+    }
+  ]
+}

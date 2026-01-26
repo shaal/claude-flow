@@ -1,0 +1,79 @@
+{
+  "layers": [
+    {
+      "id": "runtime",
+      "name": "Runtime",
+      "description": "Core runtime environment and language",
+      "order": 0,
+      "technologies": [
+        { "name": "Node.js", "version": "20+", "purpose": "JavaScript runtime", "icon": "nodejs", "docUrl": "https://nodejs.org" },
+        { "name": "TypeScript", "version": "5.3+", "purpose": "Type-safe JavaScript", "icon": "typescript", "docUrl": "https://typescriptlang.org" }
+      ]
+    },
+    {
+      "id": "framework",
+      "name": "Core Framework",
+      "description": "Agent orchestration and intelligence",
+      "order": 1,
+      "technologies": [
+        { "name": "agentic-flow", "version": "0.2.8", "purpose": "Agent orchestration", "icon": "workflow", "docUrl": "https://github.com/ruvnet/agentic-flow" },
+        { "name": "RuVector", "version": "1.0", "purpose": "Intelligence system", "icon": "brain", "docUrl": "" }
+      ]
+    },
+    {
+      "id": "memory",
+      "name": "Memory & Storage",
+      "description": "Persistent storage and vector search",
+      "order": 2,
+      "technologies": [
+        { "name": "AgentDB", "version": "3.0", "purpose": "Agent memory database", "icon": "database", "docUrl": "" },
+        { "name": "HNSW", "version": "1.0", "purpose": "150x-12,500x faster search", "icon": "search", "docUrl": "https://github.com/nmslib/hnswlib" },
+        { "name": "SQLite", "version": "3.45", "purpose": "Persistent cache", "icon": "database", "docUrl": "https://sqlite.org" },
+        { "name": "sql.js", "version": "1.10", "purpose": "WASM SQLite", "icon": "code", "docUrl": "https://sql.js.org" }
+      ]
+    },
+    {
+      "id": "security",
+      "name": "Security",
+      "description": "Validation, encryption, and protection",
+      "order": 3,
+      "technologies": [
+        { "name": "Zod", "version": "3.22", "purpose": "Schema validation", "icon": "shield", "docUrl": "https://zod.dev" },
+        { "name": "bcrypt", "version": "5.1", "purpose": "Password hashing", "icon": "lock", "docUrl": "" },
+        { "name": "Helmet", "version": "7.1", "purpose": "HTTP security", "icon": "shield", "docUrl": "https://helmetjs.github.io" }
+      ]
+    },
+    {
+      "id": "communication",
+      "name": "Communication",
+      "description": "Protocol and transport layers",
+      "order": 4,
+      "technologies": [
+        { "name": "MCP", "version": "1.0", "purpose": "Model Context Protocol", "icon": "plug", "docUrl": "https://modelcontextprotocol.io" },
+        { "name": "WebSocket", "version": "8.16", "purpose": "Real-time communication", "icon": "radio", "docUrl": "" },
+        { "name": "Express", "version": "4.18", "purpose": "HTTP server", "icon": "server", "docUrl": "https://expressjs.com" },
+        { "name": "JSON-RPC", "version": "2.0", "purpose": "Remote procedure calls", "icon": "code", "docUrl": "" }
+      ]
+    },
+    {
+      "id": "intelligence",
+      "name": "Intelligence",
+      "description": "Neural learning and optimization",
+      "order": 5,
+      "technologies": [
+        { "name": "SONA", "version": "1.0", "purpose": "Self-optimizing neural arch", "icon": "brain", "docUrl": "" },
+        { "name": "MoE", "version": "1.0", "purpose": "Mixture of Experts routing", "icon": "git-branch", "docUrl": "" },
+        { "name": "EWC++", "version": "1.0", "purpose": "Elastic weight consolidation", "icon": "layers", "docUrl": "" },
+        { "name": "ONNX", "version": "1.17", "purpose": "75x faster inference", "icon": "cpu", "docUrl": "https://onnx.ai" }
+      ]
+    }
+  ],
+  "dependencies": [
+    { "from": "framework", "to": "runtime" },
+    { "from": "memory", "to": "runtime" },
+    { "from": "security", "to": "runtime" },
+    { "from": "communication", "to": "runtime" },
+    { "from": "intelligence", "to": "framework" },
+    { "from": "intelligence", "to": "memory" }
+  ]
+}

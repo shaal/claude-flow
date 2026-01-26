@@ -1,0 +1,132 @@
+/**
+ * Mock data for metrics dashboard tests
+ */
+
+import type { PerformanceMetric, MetricVisualType } from '../../src/types';
+
+export const mockPerformanceMetrics: PerformanceMetric[] = [
+  {
+    id: 'hnsw-search',
+    name: 'HNSW Search',
+    value: 12500,
+    unit: 'x faster',
+    target: 12500,
+    baseline: 1,
+    visualType: 'counter' as MetricVisualType,
+    description: '150x-12,500x faster vector search with persistent HNSW indexing',
+    category: 'performance',
+    trend: 'up',
+    changePercent: 12400,
+  },
+  {
+    id: 'flash-attention',
+    name: 'Flash Attention',
+    value: 7.47,
+    unit: 'x speedup',
+    target: 10,
+    baseline: 1,
+    visualType: 'gauge' as MetricVisualType,
+    description: '2.49x-7.47x speedup with Flash Attention optimization',
+    category: 'performance',
+    trend: 'up',
+    changePercent: 647,
+  },
+  {
+    id: 'memory-reduction',
+    name: 'Memory Reduction',
+    value: 75,
+    unit: '%',
+    target: 100,
+    baseline: 0,
+    visualType: 'progress' as MetricVisualType,
+    description: '50-75% memory reduction with quantization',
+    category: 'efficiency',
+    trend: 'up',
+    changePercent: 75,
+  },
+  {
+    id: 'cli-startup',
+    name: 'CLI Startup',
+    value: 500,
+    unit: 'ms',
+    target: 500,
+    baseline: 2000,
+    visualType: 'timing' as MetricVisualType,
+    description: 'CLI startup time < 500ms',
+    category: 'latency',
+    trend: 'down',
+    changePercent: -75,
+  },
+  {
+    id: 'mcp-response',
+    name: 'MCP Response',
+    value: 100,
+    unit: 'ms',
+    target: 100,
+    baseline: 500,
+    visualType: 'timing' as MetricVisualType,
+    description: 'MCP server response time < 100ms',
+    category: 'latency',
+    trend: 'down',
+    changePercent: -80,
+  },
+  {
+    id: 'sona-adaptation',
+    name: 'SONA Adaptation',
+    value: 0.05,
+    unit: 'ms',
+    target: 0.05,
+    baseline: 10,
+    visualType: 'timing' as MetricVisualType,
+    description: 'SONA neural adaptation < 0.05ms',
+    category: 'latency',
+    trend: 'down',
+    changePercent: -99.5,
+  },
+];
+
+export const mockMetricsData = {
+  version: '3.0.0-alpha',
+  performance: mockPerformanceMetrics,
+  summary: {
+    totalMetrics: 6,
+    improvementsCount: 6,
+    regressionsCount: 0,
+    overallScore: 98,
+  },
+  history: [
+    {
+      timestamp: '2026-01-20T00:00:00Z',
+      metrics: {
+        'hnsw-search': 10000,
+        'flash-attention': 5.5,
+        'memory-reduction': 60,
+        'cli-startup': 600,
+        'mcp-response': 150,
+        'sona-adaptation': 0.1,
+      },
+    },
+    {
+      timestamp: '2026-01-22T00:00:00Z',
+      metrics: {
+        'hnsw-search': 11000,
+        'flash-attention': 6.5,
+        'memory-reduction': 68,
+        'cli-startup': 550,
+        'mcp-response': 120,
+        'sona-adaptation': 0.07,
+      },
+    },
+    {
+      timestamp: '2026-01-25T00:00:00Z',
+      metrics: {
+        'hnsw-search': 12500,
+        'flash-attention': 7.47,
+        'memory-reduction': 75,
+        'cli-startup': 500,
+        'mcp-response': 100,
+        'sona-adaptation': 0.05,
+      },
+    },
+  ],
+};

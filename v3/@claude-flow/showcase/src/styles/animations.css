@@ -1,0 +1,585 @@
+/* Claude Flow Visual Showcase - Animation Library */
+/* v3/@claude-flow/showcase/src/styles/animations.css */
+
+/* =============================================================================
+   Node Animations
+   ============================================================================= */
+
+/* Node entrance animation */
+@keyframes node-enter {
+  0% {
+    opacity: 0;
+    transform: scale(0);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.node-animate-enter {
+  animation: node-enter 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* Node exit animation */
+@keyframes node-exit {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0);
+  }
+}
+
+.node-animate-exit {
+  animation: node-exit 0.2s ease-in forwards;
+}
+
+/* Node selection pulse */
+@keyframes node-select {
+  0% {
+    box-shadow: 0 0 0 0 var(--glow-primary);
+  }
+  50% {
+    box-shadow: 0 0 0 15px transparent;
+  }
+  100% {
+    box-shadow: 0 0 0 0 transparent;
+  }
+}
+
+.node-animate-select {
+  animation: node-select 0.5s ease-out;
+}
+
+/* =============================================================================
+   Connection Line Animations
+   ============================================================================= */
+
+/* Data flow along path */
+@keyframes path-flow {
+  0% {
+    stroke-dashoffset: 100;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+.path-animate-flow {
+  animation: path-flow 2s linear infinite;
+  stroke-dasharray: 10 90;
+}
+
+/* Pulse along connection */
+@keyframes connection-pulse {
+  0% {
+    stroke-width: 2;
+    opacity: 1;
+  }
+  50% {
+    stroke-width: 4;
+    opacity: 0.8;
+  }
+  100% {
+    stroke-width: 2;
+    opacity: 1;
+  }
+}
+
+.connection-animate-pulse {
+  animation: connection-pulse 1.5s ease-in-out infinite;
+}
+
+/* Connection highlight on hover */
+@keyframes connection-highlight {
+  0% {
+    filter: drop-shadow(0 0 2px var(--glow-primary));
+  }
+  100% {
+    filter: drop-shadow(0 0 8px var(--glow-primary));
+  }
+}
+
+.connection-animate-highlight {
+  animation: connection-highlight 0.3s ease-out forwards;
+}
+
+/* Particle traveling along path */
+@keyframes particle-travel {
+  0% {
+    offset-distance: 0%;
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    offset-distance: 100%;
+    opacity: 0;
+  }
+}
+
+.particle-animate-travel {
+  animation: particle-travel 2s linear infinite;
+  offset-rotate: auto;
+}
+
+/* =============================================================================
+   Agent Status Animations
+   ============================================================================= */
+
+/* Active agent breathing */
+@keyframes agent-active {
+  0%, 100% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 8px var(--glow-accent));
+  }
+  50% {
+    transform: scale(1.02);
+    filter: drop-shadow(0 0 16px var(--glow-accent));
+  }
+}
+
+.agent-animate-active {
+  animation: agent-active 2s ease-in-out infinite;
+}
+
+/* Busy agent processing */
+@keyframes agent-busy {
+  0% {
+    border-color: var(--status-busy);
+  }
+  50% {
+    border-color: transparent;
+  }
+  100% {
+    border-color: var(--status-busy);
+  }
+}
+
+.agent-animate-busy {
+  animation: agent-busy 1s ease-in-out infinite;
+}
+
+/* Agent error shake */
+@keyframes agent-error {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  10%, 30%, 50%, 70%, 90% {
+    transform: translateX(-2px);
+  }
+  20%, 40%, 60%, 80% {
+    transform: translateX(2px);
+  }
+}
+
+.agent-animate-error {
+  animation: agent-error 0.5s ease-in-out;
+}
+
+/* Agent spawn */
+@keyframes agent-spawn {
+  0% {
+    opacity: 0;
+    transform: scale(0) rotate(-180deg);
+  }
+  60% {
+    transform: scale(1.2) rotate(10deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+.agent-animate-spawn {
+  animation: agent-spawn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* =============================================================================
+   Gauge and Metric Animations
+   ============================================================================= */
+
+/* Gauge fill animation */
+@keyframes gauge-fill {
+  0% {
+    stroke-dashoffset: var(--gauge-circumference, 283);
+  }
+  100% {
+    stroke-dashoffset: var(--gauge-offset, 0);
+  }
+}
+
+.gauge-animate-fill {
+  animation: gauge-fill 1.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* Counter tick up */
+@keyframes counter-tick {
+  0% {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.counter-animate-tick {
+  animation: counter-tick 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Progress bar fill */
+@keyframes progress-fill {
+  0% {
+    width: 0;
+  }
+  100% {
+    width: var(--progress-width, 100%);
+  }
+}
+
+.progress-animate-fill {
+  animation: progress-fill 1s ease-out forwards;
+}
+
+/* Metric value highlight */
+@keyframes metric-highlight {
+  0% {
+    color: var(--text-primary);
+  }
+  50% {
+    color: var(--accent-400);
+    text-shadow: 0 0 10px var(--glow-accent);
+  }
+  100% {
+    color: var(--text-primary);
+  }
+}
+
+.metric-animate-highlight {
+  animation: metric-highlight 1s ease-in-out;
+}
+
+/* =============================================================================
+   Layer Animations
+   ============================================================================= */
+
+/* Layer expand */
+@keyframes layer-expand {
+  0% {
+    max-height: 0;
+    opacity: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  100% {
+    max-height: var(--layer-height, 1000px);
+    opacity: 1;
+  }
+}
+
+.layer-animate-expand {
+  animation: layer-expand 0.4s ease-out forwards;
+  overflow: hidden;
+}
+
+/* Layer collapse */
+@keyframes layer-collapse {
+  0% {
+    max-height: var(--layer-height, 1000px);
+    opacity: 1;
+  }
+  100% {
+    max-height: 0;
+    opacity: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+}
+
+.layer-animate-collapse {
+  animation: layer-collapse 0.3s ease-in forwards;
+  overflow: hidden;
+}
+
+/* Technology card cascade */
+@keyframes tech-cascade {
+  0% {
+    opacity: 0;
+    transform: translateY(20px) scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.tech-animate-cascade {
+  animation: tech-cascade 0.3s ease-out forwards;
+}
+
+/* =============================================================================
+   Tooltip Animations
+   ============================================================================= */
+
+/* Tooltip appear */
+@keyframes tooltip-appear {
+  0% {
+    opacity: 0;
+    transform: translateY(8px) scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.tooltip-animate-appear {
+  animation: tooltip-appear 0.2s ease-out forwards;
+}
+
+/* Tooltip disappear */
+@keyframes tooltip-disappear {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(8px) scale(0.95);
+  }
+}
+
+.tooltip-animate-disappear {
+  animation: tooltip-disappear 0.15s ease-in forwards;
+}
+
+/* =============================================================================
+   View Transition Animations
+   ============================================================================= */
+
+/* View fade transition */
+@keyframes view-fade {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.view-animate-fade-in {
+  animation: view-fade 0.3s ease-out forwards;
+}
+
+.view-animate-fade-out {
+  animation: view-fade 0.3s ease-in reverse forwards;
+}
+
+/* View slide up */
+@keyframes view-slide-up {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.view-animate-slide-up {
+  animation: view-slide-up 0.4s ease-out forwards;
+}
+
+/* View zoom */
+@keyframes view-zoom {
+  0% {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.view-animate-zoom-in {
+  animation: view-zoom 0.3s ease-out forwards;
+}
+
+/* =============================================================================
+   Loading Animations
+   ============================================================================= */
+
+/* Skeleton wave */
+@keyframes skeleton-wave {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.skeleton-animate-wave {
+  background: linear-gradient(
+    90deg,
+    var(--bg-card) 0%,
+    var(--bg-card-hover) 20%,
+    var(--bg-card-hover) 40%,
+    var(--bg-card) 60%,
+    var(--bg-card) 100%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-wave 1.5s ease-in-out infinite;
+}
+
+/* Spinner rotation */
+@keyframes spinner-rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.spinner-animate-rotate {
+  animation: spinner-rotate 1s linear infinite;
+}
+
+/* Dots loading */
+@keyframes dots-bounce {
+  0%, 80%, 100% {
+    transform: scale(0);
+    opacity: 0.5;
+  }
+  40% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.dots-animate-bounce:nth-child(1) {
+  animation: dots-bounce 1.4s ease-in-out infinite;
+  animation-delay: -0.32s;
+}
+
+.dots-animate-bounce:nth-child(2) {
+  animation: dots-bounce 1.4s ease-in-out infinite;
+  animation-delay: -0.16s;
+}
+
+.dots-animate-bounce:nth-child(3) {
+  animation: dots-bounce 1.4s ease-in-out infinite;
+}
+
+/* =============================================================================
+   Attention Animations
+   ============================================================================= */
+
+/* Ring attention */
+@keyframes ring-attention {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 var(--glow-primary);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 0 0 10px transparent;
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 transparent;
+  }
+}
+
+.ring-animate-attention {
+  animation: ring-attention 1s ease-out;
+}
+
+/* Flash attention */
+@keyframes flash-attention {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.flash-animate-attention {
+  animation: flash-attention 0.5s ease-in-out 3;
+}
+
+/* Bounce attention */
+@keyframes bounce-attention {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  25% {
+    transform: translateY(-10px);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+  75% {
+    transform: translateY(-8px);
+  }
+}
+
+.bounce-animate-attention {
+  animation: bounce-attention 0.6s ease-in-out;
+}
+
+/* =============================================================================
+   Reduced Motion Support
+   ============================================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
+  }
+
+  /* Alternative static states for animated elements */
+  .node-animate-enter,
+  .node-animate-select,
+  .agent-animate-active,
+  .agent-animate-spawn,
+  .gauge-animate-fill,
+  .progress-animate-fill,
+  .layer-animate-expand,
+  .tooltip-animate-appear,
+  .view-animate-fade-in,
+  .view-animate-slide-up {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* Keep essential visual indicators */
+  .connection-animate-pulse,
+  .agent-animate-busy {
+    animation: none;
+  }
+
+  /* Static loading indicator */
+  .skeleton-animate-wave {
+    animation: none;
+    background: var(--bg-card-hover);
+  }
+}

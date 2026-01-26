@@ -1,0 +1,577 @@
+/* Claude Flow Visual Showcase - Responsive Utilities */
+/* v3/@claude-flow/showcase/src/styles/responsive.css */
+
+/* =============================================================================
+   Mobile-First Responsive Breakpoints
+   - Mobile: < 640px (default)
+   - sm: 640px (small tablets)
+   - md: 768px (tablets)
+   - lg: 1024px (laptops)
+   - xl: 1280px (desktops)
+   - 2xl: 1536px (large screens)
+   ============================================================================= */
+
+/* =============================================================================
+   Container Queries (Modern CSS)
+   ============================================================================= */
+
+@container (min-width: 400px) {
+  .container-responsive {
+    padding: var(--space-4);
+  }
+}
+
+@container (min-width: 600px) {
+  .container-responsive {
+    padding: var(--space-6);
+  }
+}
+
+/* =============================================================================
+   Grid Layouts
+   ============================================================================= */
+
+/* Auto-fit grid for cards */
+.grid-auto-fit {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--space-4);
+}
+
+@media (min-width: 640px) {
+  .grid-auto-fit {
+    gap: var(--space-6);
+  }
+}
+
+/* Fixed column grids with responsive breakpoints */
+.grid-responsive-2 {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-4);
+}
+
+@media (min-width: 640px) {
+  .grid-responsive-2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.grid-responsive-3 {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-4);
+}
+
+@media (min-width: 640px) {
+  .grid-responsive-3 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .grid-responsive-3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.grid-responsive-4 {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-4);
+}
+
+@media (min-width: 640px) {
+  .grid-responsive-4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .grid-responsive-4 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 1280px) {
+  .grid-responsive-4 {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* =============================================================================
+   Flexbox Layouts
+   ============================================================================= */
+
+/* Stack on mobile, row on tablet+ */
+.flex-responsive {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+@media (min-width: 768px) {
+  .flex-responsive {
+    flex-direction: row;
+  }
+}
+
+/* Center on mobile, space-between on tablet+ */
+.flex-responsive-between {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+@media (min-width: 768px) {
+  .flex-responsive-between {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+}
+
+/* =============================================================================
+   Typography Responsiveness
+   ============================================================================= */
+
+/* Fluid typography */
+.text-fluid-lg {
+  font-size: clamp(1.125rem, 1rem + 0.5vw, 1.25rem);
+}
+
+.text-fluid-xl {
+  font-size: clamp(1.25rem, 1rem + 1vw, 1.5rem);
+}
+
+.text-fluid-2xl {
+  font-size: clamp(1.5rem, 1.25rem + 1vw, 1.875rem);
+}
+
+.text-fluid-3xl {
+  font-size: clamp(1.875rem, 1.5rem + 1.5vw, 2.25rem);
+}
+
+.text-fluid-4xl {
+  font-size: clamp(2.25rem, 1.75rem + 2vw, 3rem);
+}
+
+/* Responsive line clamping */
+.line-clamp-responsive {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  -webkit-line-clamp: 2;
+}
+
+@media (min-width: 768px) {
+  .line-clamp-responsive {
+    -webkit-line-clamp: 3;
+  }
+}
+
+/* =============================================================================
+   Spacing Responsiveness
+   ============================================================================= */
+
+/* Responsive padding */
+.p-responsive {
+  padding: var(--space-4);
+}
+
+@media (min-width: 640px) {
+  .p-responsive {
+    padding: var(--space-6);
+  }
+}
+
+@media (min-width: 1024px) {
+  .p-responsive {
+    padding: var(--space-8);
+  }
+}
+
+/* Responsive margin */
+.my-responsive {
+  margin-top: var(--space-6);
+  margin-bottom: var(--space-6);
+}
+
+@media (min-width: 768px) {
+  .my-responsive {
+    margin-top: var(--space-8);
+    margin-bottom: var(--space-8);
+  }
+}
+
+@media (min-width: 1024px) {
+  .my-responsive {
+    margin-top: var(--space-12);
+    margin-bottom: var(--space-12);
+  }
+}
+
+/* Responsive gap */
+.gap-responsive {
+  gap: var(--space-4);
+}
+
+@media (min-width: 768px) {
+  .gap-responsive {
+    gap: var(--space-6);
+  }
+}
+
+@media (min-width: 1024px) {
+  .gap-responsive {
+    gap: var(--space-8);
+  }
+}
+
+/* =============================================================================
+   Visibility Utilities
+   ============================================================================= */
+
+/* Hide on mobile */
+.hide-mobile {
+  display: none;
+}
+
+@media (min-width: 640px) {
+  .hide-mobile {
+    display: block;
+  }
+}
+
+/* Hide on tablet and below */
+.hide-tablet {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .hide-tablet {
+    display: block;
+  }
+}
+
+/* Show only on mobile */
+.show-mobile-only {
+  display: block;
+}
+
+@media (min-width: 640px) {
+  .show-mobile-only {
+    display: none;
+  }
+}
+
+/* Show only on tablet */
+.show-tablet-only {
+  display: none;
+}
+
+@media (min-width: 640px) and (max-width: 1023px) {
+  .show-tablet-only {
+    display: block;
+  }
+}
+
+/* =============================================================================
+   Touch Target Sizes (Accessibility)
+   44x44px minimum for touch targets
+   ============================================================================= */
+
+.touch-target {
+  min-width: 44px;
+  min-height: 44px;
+}
+
+/* Larger touch targets on mobile */
+@media (max-width: 767px) {
+  .touch-target-mobile {
+    min-width: 48px;
+    min-height: 48px;
+    padding: var(--space-3);
+  }
+}
+
+/* Interactive elements */
+.interactive-touch {
+  padding: var(--space-3);
+  min-height: 44px;
+}
+
+@media (min-width: 768px) {
+  .interactive-touch {
+    padding: var(--space-2);
+    min-height: auto;
+  }
+}
+
+/* =============================================================================
+   Scrolling Behavior
+   ============================================================================= */
+
+/* Horizontal scroll container */
+.scroll-x {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+}
+
+/* Hide scrollbar on mobile */
+@media (max-width: 767px) {
+  .scroll-x-mobile-hidden {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scroll-x-mobile-hidden::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Snap scroll for carousels */
+.scroll-snap-x {
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+
+.scroll-snap-item {
+  scroll-snap-align: start;
+  flex-shrink: 0;
+}
+
+/* =============================================================================
+   Visualization Container Responsiveness
+   ============================================================================= */
+
+.visualization-container {
+  width: 100%;
+  height: 300px;
+}
+
+@media (min-width: 640px) {
+  .visualization-container {
+    height: 400px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .visualization-container {
+    height: 500px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .visualization-container {
+    height: 600px;
+  }
+}
+
+/* Aspect ratio containers */
+.aspect-video {
+  aspect-ratio: 16 / 9;
+}
+
+.aspect-square {
+  aspect-ratio: 1 / 1;
+}
+
+.aspect-visualization {
+  aspect-ratio: 4 / 3;
+}
+
+@media (min-width: 1024px) {
+  .aspect-visualization {
+    aspect-ratio: 16 / 10;
+  }
+}
+
+/* =============================================================================
+   Sidebar Layout Responsiveness
+   ============================================================================= */
+
+.layout-with-sidebar {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-6);
+}
+
+@media (min-width: 1024px) {
+  .layout-with-sidebar {
+    grid-template-columns: 1fr 320px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .layout-with-sidebar {
+    grid-template-columns: 1fr 380px;
+  }
+}
+
+/* =============================================================================
+   Card Layouts
+   ============================================================================= */
+
+/* Responsive card sizing */
+.card-responsive {
+  padding: var(--space-4);
+}
+
+@media (min-width: 768px) {
+  .card-responsive {
+    padding: var(--space-6);
+  }
+}
+
+/* Card header layout */
+.card-header-responsive {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+@media (min-width: 640px) {
+  .card-header-responsive {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+/* =============================================================================
+   Navigation Responsiveness
+   ============================================================================= */
+
+.nav-responsive {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .nav-responsive {
+    display: flex;
+  }
+}
+
+.nav-mobile-toggle {
+  display: flex;
+}
+
+@media (min-width: 1024px) {
+  .nav-mobile-toggle {
+    display: none;
+  }
+}
+
+/* =============================================================================
+   Metric Dashboard Responsiveness
+   ============================================================================= */
+
+.metrics-grid-responsive {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-4);
+}
+
+@media (min-width: 480px) {
+  .metrics-grid-responsive {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 768px) {
+  .metrics-grid-responsive {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 1280px) {
+  .metrics-grid-responsive {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* =============================================================================
+   Print Responsiveness
+   ============================================================================= */
+
+@media print {
+  .print-hidden {
+    display: none !important;
+  }
+
+  .print-break-before {
+    page-break-before: always;
+  }
+
+  .print-break-after {
+    page-break-after: always;
+  }
+
+  .print-avoid-break {
+    page-break-inside: avoid;
+  }
+
+  /* Reset dark theme for printing */
+  body {
+    background-color: white;
+    color: black;
+  }
+
+  .card {
+    border: 1px solid #ccc;
+    box-shadow: none;
+  }
+}
+
+/* =============================================================================
+   Reduced Motion Support
+   ============================================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .scroll-snap-x {
+    scroll-snap-type: none;
+  }
+}
+
+/* =============================================================================
+   High Contrast Mode Support
+   ============================================================================= */
+
+@media (prefers-contrast: high) {
+  .card,
+  .btn,
+  .badge {
+    border-width: 2px;
+  }
+
+  .text-secondary {
+    color: var(--text-primary);
+  }
+}
+
+/* =============================================================================
+   Dark Mode (if system preference)
+   ============================================================================= */
+
+@media (prefers-color-scheme: light) {
+  /* Override dark theme if user prefers light */
+  .auto-theme {
+    --bg-dark: #ffffff;
+    --bg-card: #f1f5f9;
+    --bg-card-hover: #e2e8f0;
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --border-default: #cbd5e1;
+  }
+}

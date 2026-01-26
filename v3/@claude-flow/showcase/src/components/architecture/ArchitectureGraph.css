@@ -1,0 +1,547 @@
+/* Claude Flow Visual Showcase - Architecture Graph Styles */
+/* v3/@claude-flow/showcase/src/components/architecture/ArchitectureGraph.css */
+
+/* =============================================================================
+   Architecture Graph Container
+   ============================================================================= */
+
+.architecture-graph {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 500px;
+  overflow: hidden;
+}
+
+.architecture-graph-svg {
+  width: 100%;
+  height: 100%;
+  cursor: grab;
+}
+
+.architecture-graph-svg:active {
+  cursor: grabbing;
+}
+
+/* =============================================================================
+   Graph Nodes
+   ============================================================================= */
+
+.graph-node {
+  cursor: pointer;
+  transition: transform var(--transition-fast);
+}
+
+.graph-node:hover {
+  transform: scale(1.05);
+}
+
+.graph-node--selected {
+  transform: scale(1.1);
+}
+
+/* Node shapes */
+.node-circle {
+  fill: var(--bg-card);
+  stroke: var(--border-default);
+  stroke-width: 2;
+  transition: all var(--transition-fast);
+}
+
+.node-circle:hover {
+  fill: var(--bg-card-hover);
+  stroke: var(--primary-400);
+  stroke-width: 3;
+}
+
+.node-circle--selected {
+  fill: var(--primary-900);
+  stroke: var(--primary-500);
+  stroke-width: 3;
+}
+
+.node-circle--active {
+  stroke: var(--status-active);
+  animation: glow-pulse 2s ease-in-out infinite;
+}
+
+/* Node glow effects */
+.node-glow {
+  fill: none;
+  stroke: var(--glow-primary);
+  stroke-width: 8;
+  opacity: 0;
+  transition: opacity var(--transition-normal);
+  filter: blur(4px);
+}
+
+.graph-node:hover .node-glow,
+.graph-node--selected .node-glow {
+  opacity: 0.5;
+}
+
+.graph-node--active .node-glow {
+  stroke: var(--glow-accent);
+  animation: pulse-soft 2s ease-in-out infinite;
+}
+
+/* Node icons */
+.node-icon {
+  fill: var(--text-secondary);
+  transition: fill var(--transition-fast);
+}
+
+.graph-node:hover .node-icon,
+.graph-node--selected .node-icon {
+  fill: var(--text-primary);
+}
+
+/* Node labels */
+.node-label {
+  fill: var(--text-secondary);
+  font-size: var(--text-xs);
+  font-family: var(--font-body);
+  font-weight: var(--font-medium);
+  text-anchor: middle;
+  pointer-events: none;
+  transition: all var(--transition-fast);
+}
+
+.graph-node:hover .node-label,
+.graph-node--selected .node-label {
+  fill: var(--text-primary);
+}
+
+/* Node badges (for status indicators) */
+.node-badge {
+  fill: var(--status-idle);
+  stroke: var(--bg-dark);
+  stroke-width: 2;
+}
+
+.node-badge--active {
+  fill: var(--status-active);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.node-badge--busy {
+  fill: var(--status-busy);
+}
+
+.node-badge--error {
+  fill: var(--status-error);
+}
+
+/* =============================================================================
+   Node Types
+   ============================================================================= */
+
+/* Module nodes */
+.node-module .node-circle {
+  fill: var(--bg-card);
+  stroke: var(--primary-500);
+}
+
+.node-module:hover .node-circle {
+  fill: var(--primary-950);
+  stroke: var(--primary-400);
+}
+
+/* Agent nodes */
+.node-agent .node-circle {
+  fill: var(--bg-card);
+  stroke: var(--accent-500);
+}
+
+.node-agent:hover .node-circle {
+  fill: rgba(34, 197, 94, 0.1);
+  stroke: var(--accent-400);
+}
+
+/* Service nodes */
+.node-service .node-circle {
+  fill: var(--bg-card);
+  stroke: var(--status-busy);
+}
+
+.node-service:hover .node-circle {
+  fill: rgba(245, 158, 11, 0.1);
+  stroke: var(--status-warning);
+}
+
+/* Database nodes */
+.node-database .node-circle {
+  fill: var(--bg-card);
+  stroke: var(--status-info);
+}
+
+.node-database:hover .node-circle {
+  fill: rgba(59, 130, 246, 0.1);
+  stroke: var(--primary-400);
+}
+
+/* =============================================================================
+   Connection Lines
+   ============================================================================= */
+
+.connection-line {
+  fill: none;
+  stroke: var(--border-default);
+  stroke-width: 2;
+  opacity: 0.6;
+  transition: all var(--transition-fast);
+}
+
+.connection-line:hover {
+  stroke: var(--primary-400);
+  stroke-width: 3;
+  opacity: 1;
+}
+
+.connection-line--selected {
+  stroke: var(--primary-500);
+  stroke-width: 3;
+  opacity: 1;
+}
+
+/* Animated dashed connections */
+.connection-line--animated {
+  stroke-dasharray: 8 16;
+  animation: dash 1s linear infinite;
+}
+
+.connection-line--animated-slow {
+  stroke-dasharray: 8 16;
+  animation: dash 2s linear infinite;
+}
+
+/* Connection types */
+.connection-line--uses {
+  stroke: var(--border-default);
+}
+
+.connection-line--depends {
+  stroke: var(--primary-400);
+  stroke-dasharray: 5 5;
+}
+
+.connection-line--data {
+  stroke: var(--accent-400);
+}
+
+.connection-line--event {
+  stroke: var(--status-busy);
+}
+
+/* Connection highlights on node hover */
+.connection-line--highlighted {
+  stroke: var(--primary-400);
+  stroke-width: 3;
+  opacity: 1;
+  filter: drop-shadow(0 0 4px var(--glow-primary));
+}
+
+/* Dimmed connections (non-related) */
+.connection-line--dimmed {
+  opacity: 0.15;
+}
+
+/* Connection arrows */
+.connection-arrow {
+  fill: var(--border-default);
+  transition: fill var(--transition-fast);
+}
+
+.connection-line:hover + .connection-arrow,
+.connection-line--selected + .connection-arrow,
+.connection-line--highlighted + .connection-arrow {
+  fill: var(--primary-400);
+}
+
+/* Connection labels */
+.connection-label {
+  fill: var(--text-tertiary);
+  font-size: var(--text-xs);
+  font-family: var(--font-body);
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+}
+
+.connection-line:hover ~ .connection-label,
+.connection-line--selected ~ .connection-label {
+  opacity: 1;
+}
+
+/* =============================================================================
+   Data Flow Animation
+   ============================================================================= */
+
+.data-flow-particle {
+  fill: var(--primary-400);
+  opacity: 0;
+}
+
+.data-flow-particle--active {
+  opacity: 1;
+  animation: flow 2s ease-in-out infinite;
+}
+
+/* Animated flow gradient */
+.flow-gradient {
+  stop-color: var(--primary-400);
+}
+
+.flow-gradient--start {
+  stop-opacity: 0;
+}
+
+.flow-gradient--end {
+  stop-opacity: 1;
+}
+
+/* =============================================================================
+   Cluster Groups
+   ============================================================================= */
+
+.cluster-group {
+  fill: none;
+  stroke: var(--border-subtle);
+  stroke-width: 1;
+  stroke-dasharray: 4 4;
+  rx: 8;
+  ry: 8;
+  opacity: 0.5;
+  transition: all var(--transition-normal);
+}
+
+.cluster-group:hover {
+  stroke: var(--border-default);
+  opacity: 1;
+}
+
+.cluster-group-label {
+  fill: var(--text-tertiary);
+  font-size: var(--text-xs);
+  font-family: var(--font-body);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* =============================================================================
+   Zoom Controls
+   ============================================================================= */
+
+.graph-controls {
+  position: absolute;
+  bottom: var(--space-4);
+  right: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  z-index: var(--z-dropdown);
+}
+
+.graph-control-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  color: var(--text-secondary);
+  transition: all var(--transition-fast);
+}
+
+.graph-control-btn:hover {
+  background-color: var(--bg-card-hover);
+  border-color: var(--border-strong);
+  color: var(--text-primary);
+}
+
+.graph-control-btn:active {
+  transform: scale(0.95);
+}
+
+.graph-control-btn--active {
+  background-color: var(--primary-900);
+  border-color: var(--primary-500);
+  color: var(--primary-300);
+}
+
+/* =============================================================================
+   Minimap
+   ============================================================================= */
+
+.graph-minimap {
+  position: absolute;
+  bottom: var(--space-4);
+  left: var(--space-4);
+  width: 150px;
+  height: 100px;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  z-index: var(--z-dropdown);
+}
+
+.minimap-viewport {
+  fill: var(--primary-500);
+  fill-opacity: 0.2;
+  stroke: var(--primary-500);
+  stroke-width: 1;
+  cursor: move;
+}
+
+.minimap-node {
+  fill: var(--text-tertiary);
+}
+
+.minimap-connection {
+  stroke: var(--border-default);
+  stroke-width: 0.5;
+}
+
+/* =============================================================================
+   Node Tooltips
+   ============================================================================= */
+
+.node-tooltip {
+  position: absolute;
+  z-index: var(--z-tooltip);
+  pointer-events: none;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  padding: var(--space-3) var(--space-4);
+  box-shadow: var(--shadow-xl);
+  max-width: 280px;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: all var(--transition-fast);
+}
+
+.node-tooltip--visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.node-tooltip-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-2);
+}
+
+.node-tooltip-title {
+  font-size: var(--text-sm);
+  font-weight: var(--font-semibold);
+  color: var(--text-primary);
+}
+
+.node-tooltip-type {
+  font-size: var(--text-xs);
+  color: var(--text-tertiary);
+  background-color: var(--bg-darker);
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-full);
+}
+
+.node-tooltip-description {
+  font-size: var(--text-xs);
+  color: var(--text-secondary);
+  line-height: var(--leading-relaxed);
+}
+
+.node-tooltip-stats {
+  display: flex;
+  gap: var(--space-4);
+  margin-top: var(--space-2);
+  padding-top: var(--space-2);
+  border-top: 1px solid var(--border-subtle);
+}
+
+.node-tooltip-stat {
+  display: flex;
+  flex-direction: column;
+}
+
+.node-tooltip-stat-label {
+  font-size: var(--text-xs);
+  color: var(--text-tertiary);
+}
+
+.node-tooltip-stat-value {
+  font-size: var(--text-sm);
+  font-weight: var(--font-semibold);
+  font-family: var(--font-mono);
+  color: var(--text-primary);
+}
+
+/* =============================================================================
+   View Mode Transitions
+   ============================================================================= */
+
+/* Nodes transition for layout changes */
+.graph-node-transition {
+  transition: transform 750ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Connections transition for layout changes */
+.connection-line-transition {
+  transition: d 750ms cubic-bezier(0.4, 0, 0.2, 1),
+              stroke 250ms ease,
+              opacity 250ms ease;
+}
+
+/* Fade in for new elements */
+.graph-element-enter {
+  opacity: 0;
+  transform: scale(0.8);
+}
+
+.graph-element-enter-active {
+  opacity: 1;
+  transform: scale(1);
+  transition: all 300ms ease-out;
+}
+
+/* Fade out for removed elements */
+.graph-element-exit {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.graph-element-exit-active {
+  opacity: 0;
+  transform: scale(0.8);
+  transition: all 200ms ease-in;
+}
+
+/* =============================================================================
+   Responsive Adjustments
+   ============================================================================= */
+
+@media (max-width: 767px) {
+  .graph-minimap {
+    display: none;
+  }
+
+  .graph-controls {
+    bottom: var(--space-2);
+    right: var(--space-2);
+  }
+
+  .node-label {
+    font-size: 10px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .graph-minimap {
+    width: 200px;
+    height: 130px;
+  }
+}

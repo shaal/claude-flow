@@ -1,0 +1,83 @@
+{
+  "performance": [
+    {
+      "id": "hnsw-search",
+      "name": "HNSW Search",
+      "value": 12500,
+      "displayValue": "12,500x",
+      "unit": "faster",
+      "target": 12500,
+      "baseline": 1,
+      "visualType": "counter",
+      "description": "Vector search with HNSW indexing",
+      "improvement": "150x-12,500x improvement over linear scan"
+    },
+    {
+      "id": "flash-attention",
+      "name": "Flash Attention",
+      "value": 7.47,
+      "displayValue": "7.47x",
+      "unit": "speedup",
+      "target": 7.47,
+      "baseline": 1,
+      "visualType": "gauge",
+      "description": "Optimized attention computation",
+      "improvement": "2.49x-7.47x speedup range"
+    },
+    {
+      "id": "memory-reduction",
+      "name": "Memory Reduction",
+      "value": 75,
+      "displayValue": "75%",
+      "unit": "reduction",
+      "target": 75,
+      "baseline": 0,
+      "visualType": "progress",
+      "description": "Memory savings with quantization",
+      "improvement": "50-75% reduction with Int8 quantization"
+    },
+    {
+      "id": "cli-startup",
+      "name": "CLI Startup",
+      "value": 500,
+      "displayValue": "<500ms",
+      "unit": "ms",
+      "target": 500,
+      "baseline": 2000,
+      "visualType": "chart",
+      "description": "Time to interactive CLI",
+      "improvement": "75% faster startup"
+    },
+    {
+      "id": "mcp-response",
+      "name": "MCP Response",
+      "value": 100,
+      "displayValue": "<100ms",
+      "unit": "ms",
+      "target": 100,
+      "baseline": 500,
+      "visualType": "chart",
+      "description": "MCP tool invocation latency",
+      "improvement": "5x faster response"
+    },
+    {
+      "id": "sona-adaptation",
+      "name": "SONA Adaptation",
+      "value": 0.05,
+      "displayValue": "<0.05ms",
+      "unit": "ms",
+      "target": 0.05,
+      "baseline": 1,
+      "visualType": "counter",
+      "description": "Self-optimizing neural architecture",
+      "improvement": "20x faster adaptation"
+    }
+  ],
+  "summary": {
+    "totalAgents": 60,
+    "totalCommands": 26,
+    "totalSubcommands": 140,
+    "totalHooks": 17,
+    "totalWorkers": 12
+  }
+}

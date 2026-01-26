@@ -1,0 +1,65 @@
+{
+  "categories": [
+    {
+      "id": "orchestration",
+      "name": "Agent Orchestration",
+      "description": "Multi-agent coordination and management",
+      "features": [
+        { "id": "swarm-coordination", "name": "Swarm Coordination", "description": "15-agent hierarchical mesh topology with real-time coordination", "status": "implemented", "icon": "users", "relatedModules": ["swarm", "agents"] },
+        { "id": "hive-mind", "name": "Hive-Mind Consensus", "description": "Queen-led Byzantine fault-tolerant consensus", "status": "implemented", "icon": "crown", "relatedModules": ["hive-mind", "swarm"] },
+        { "id": "topology-switching", "name": "Topology Switching", "description": "Dynamic switching between hierarchical, mesh, and adaptive topologies", "status": "implemented", "icon": "git-branch", "relatedModules": ["swarm"] }
+      ]
+    },
+    {
+      "id": "memory",
+      "name": "Memory & Intelligence",
+      "description": "Persistent memory and neural learning",
+      "features": [
+        { "id": "agentdb", "name": "AgentDB", "description": "Hybrid SQLite + vector database for agent memory", "status": "implemented", "icon": "database", "relatedModules": ["memory"] },
+        { "id": "hnsw-indexing", "name": "HNSW Indexing", "description": "150x-12,500x faster vector search", "status": "implemented", "icon": "search", "relatedModules": ["memory", "embeddings"] },
+        { "id": "neural-learning", "name": "Neural Learning", "description": "SONA self-optimizing architecture with MoE routing", "status": "implemented", "icon": "brain", "relatedModules": ["neural"] },
+        { "id": "reasoningbank", "name": "ReasoningBank", "description": "Adaptive learning with trajectory tracking", "status": "implemented", "icon": "lightbulb", "relatedModules": ["neural", "hooks"] }
+      ]
+    },
+    {
+      "id": "cli",
+      "name": "CLI & Tools",
+      "description": "Command-line interface and developer tools",
+      "features": [
+        { "id": "26-commands", "name": "26 Core Commands", "description": "Comprehensive CLI with 140+ subcommands", "status": "implemented", "icon": "terminal", "relatedModules": ["cli"] },
+        { "id": "hooks-system", "name": "17 Hooks + 12 Workers", "description": "Self-learning hooks with background workers", "status": "implemented", "icon": "zap", "relatedModules": ["hooks", "daemon"] },
+        { "id": "doctor", "name": "Doctor Diagnostics", "description": "System health checks and auto-fix", "status": "implemented", "icon": "activity", "relatedModules": ["cli"] }
+      ]
+    },
+    {
+      "id": "integration",
+      "name": "Integration",
+      "description": "External integrations and protocols",
+      "features": [
+        { "id": "mcp-server", "name": "MCP Server", "description": "50+ tools via Model Context Protocol", "status": "implemented", "icon": "plug", "relatedModules": ["mcp"] },
+        { "id": "github-integration", "name": "GitHub Integration", "description": "PR management, code review swarms, issue tracking", "status": "implemented", "icon": "github", "relatedModules": ["agents"] },
+        { "id": "plugin-system", "name": "Plugin System", "description": "IPFS-based plugin registry with Pinata", "status": "implemented", "icon": "package", "relatedModules": ["cli"] }
+      ]
+    },
+    {
+      "id": "security",
+      "name": "Security",
+      "description": "Security scanning and validation",
+      "features": [
+        { "id": "cve-scanning", "name": "CVE Scanning", "description": "Automated vulnerability detection", "status": "implemented", "icon": "shield", "relatedModules": ["security"] },
+        { "id": "input-validation", "name": "Input Validation", "description": "Zod-based validation at boundaries", "status": "implemented", "icon": "check-circle", "relatedModules": ["security"] },
+        { "id": "path-security", "name": "Path Security", "description": "Path traversal prevention", "status": "implemented", "icon": "lock", "relatedModules": ["security"] }
+      ]
+    },
+    {
+      "id": "performance",
+      "name": "Performance",
+      "description": "Optimization and benchmarking",
+      "features": [
+        { "id": "token-optimizer", "name": "Token Optimizer", "description": "30-50% token reduction with Agent Booster", "status": "implemented", "icon": "trending-down", "relatedModules": ["cli"] },
+        { "id": "flash-attention", "name": "Flash Attention", "description": "2.49x-7.47x speedup", "status": "in-progress", "icon": "zap", "relatedModules": ["neural"] },
+        { "id": "quantization", "name": "Memory Quantization", "description": "3.92x reduction with Int8", "status": "implemented", "icon": "minimize-2", "relatedModules": ["memory", "embeddings"] }
+      ]
+    }
+  ]
+}

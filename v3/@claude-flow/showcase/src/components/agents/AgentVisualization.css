@@ -1,0 +1,631 @@
+/* Claude Flow Visual Showcase - Agent Visualization Styles */
+/* v3/@claude-flow/showcase/src/components/agents/AgentVisualization.css */
+
+/* =============================================================================
+   Agent Visualization Container
+   ============================================================================= */
+
+.agent-visualization {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 500px;
+  overflow: hidden;
+  background: radial-gradient(ellipse at center, var(--bg-card) 0%, var(--bg-dark) 70%);
+}
+
+.agent-visualization-canvas {
+  width: 100%;
+  height: 100%;
+}
+
+/* =============================================================================
+   Agent Nodes
+   ============================================================================= */
+
+.agent-node {
+  cursor: pointer;
+  transition: transform var(--transition-fast);
+}
+
+.agent-node:hover {
+  transform: scale(1.1);
+}
+
+.agent-node--selected {
+  transform: scale(1.15);
+}
+
+/* Agent node base */
+.agent-node-circle {
+  fill: var(--bg-card);
+  stroke: var(--border-default);
+  stroke-width: 2;
+  transition: all var(--transition-fast);
+}
+
+.agent-node:hover .agent-node-circle {
+  fill: var(--bg-card-hover);
+  stroke: var(--primary-400);
+}
+
+.agent-node--selected .agent-node-circle {
+  fill: var(--primary-900);
+  stroke: var(--primary-500);
+  stroke-width: 3;
+}
+
+/* Agent status glow */
+.agent-glow {
+  fill: none;
+  opacity: 0;
+  filter: blur(6px);
+  transition: opacity var(--transition-normal);
+}
+
+.agent-node:hover .agent-glow {
+  opacity: 0.3;
+}
+
+.agent-node--active .agent-glow {
+  opacity: 0.5;
+  stroke: var(--glow-accent);
+  animation: pulse-soft 2s ease-in-out infinite;
+}
+
+/* =============================================================================
+   Agent Status Indicators
+   ============================================================================= */
+
+.agent-status-ring {
+  fill: none;
+  stroke-width: 3;
+  opacity: 0.8;
+  transition: all var(--transition-fast);
+}
+
+.agent-status-ring--active {
+  stroke: var(--status-active);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.agent-status-ring--idle {
+  stroke: var(--status-idle);
+}
+
+.agent-status-ring--busy {
+  stroke: var(--status-busy);
+  animation: spin-slow 3s linear infinite;
+}
+
+.agent-status-ring--error {
+  stroke: var(--status-error);
+  animation: glow-pulse 1s ease-in-out infinite;
+}
+
+/* Status dot indicator */
+.agent-status-dot {
+  fill: var(--status-idle);
+  stroke: var(--bg-dark);
+  stroke-width: 2;
+  transition: fill var(--transition-fast);
+}
+
+.agent-status-dot--active {
+  fill: var(--status-active);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.agent-status-dot--busy {
+  fill: var(--status-busy);
+}
+
+.agent-status-dot--error {
+  fill: var(--status-error);
+}
+
+/* =============================================================================
+   Agent Type Styling
+   ============================================================================= */
+
+/* Core agents */
+.agent-type-coder .agent-node-circle {
+  stroke: #60a5fa;
+}
+
+.agent-type-reviewer .agent-node-circle {
+  stroke: #f472b6;
+}
+
+.agent-type-tester .agent-node-circle {
+  stroke: #34d399;
+}
+
+.agent-type-planner .agent-node-circle {
+  stroke: #fbbf24;
+}
+
+.agent-type-researcher .agent-node-circle {
+  stroke: #a78bfa;
+}
+
+/* Coordinator agents */
+.agent-type-coordinator .agent-node-circle {
+  stroke: var(--primary-500);
+  stroke-width: 3;
+}
+
+.agent-type-queen .agent-node-circle {
+  stroke: #fbbf24;
+  stroke-width: 4;
+  fill: rgba(251, 191, 36, 0.1);
+}
+
+/* Specialized agents */
+.agent-type-security .agent-node-circle {
+  stroke: #ef4444;
+}
+
+.agent-type-performance .agent-node-circle {
+  stroke: #22d3ee;
+}
+
+.agent-type-memory .agent-node-circle {
+  stroke: #8b5cf6;
+}
+
+/* =============================================================================
+   Agent Labels
+   ============================================================================= */
+
+.agent-label {
+  fill: var(--text-secondary);
+  font-size: var(--text-xs);
+  font-family: var(--font-body);
+  font-weight: var(--font-medium);
+  text-anchor: middle;
+  pointer-events: none;
+  transition: all var(--transition-fast);
+}
+
+.agent-node:hover .agent-label,
+.agent-node--selected .agent-label {
+  fill: var(--text-primary);
+}
+
+.agent-role-label {
+  fill: var(--text-tertiary);
+  font-size: 10px;
+  font-family: var(--font-body);
+  text-anchor: middle;
+  pointer-events: none;
+}
+
+/* Agent icon in center */
+.agent-icon {
+  fill: var(--text-secondary);
+  transition: fill var(--transition-fast);
+}
+
+.agent-node:hover .agent-icon,
+.agent-node--selected .agent-icon {
+  fill: var(--text-primary);
+}
+
+/* =============================================================================
+   Agent Connections
+   ============================================================================= */
+
+.agent-connection {
+  fill: none;
+  stroke: var(--border-default);
+  stroke-width: 1.5;
+  opacity: 0.4;
+  transition: all var(--transition-fast);
+}
+
+.agent-connection:hover {
+  stroke: var(--primary-400);
+  stroke-width: 2;
+  opacity: 1;
+}
+
+.agent-connection--active {
+  stroke: var(--accent-500);
+  stroke-width: 2;
+  opacity: 0.8;
+  stroke-dasharray: 6 12;
+  animation: dash 1s linear infinite;
+}
+
+.agent-connection--hierarchical {
+  stroke: var(--primary-400);
+  stroke-dasharray: 8 4;
+}
+
+.agent-connection--mesh {
+  stroke: var(--accent-400);
+  stroke-dasharray: none;
+}
+
+.agent-connection--highlighted {
+  stroke: var(--primary-400);
+  stroke-width: 3;
+  opacity: 1;
+  filter: drop-shadow(0 0 4px var(--glow-primary));
+}
+
+.agent-connection--dimmed {
+  opacity: 0.1;
+}
+
+/* Data flow particles on connections */
+.agent-data-particle {
+  fill: var(--primary-400);
+  r: 3;
+}
+
+.agent-data-particle--animate {
+  animation: flow 2s ease-in-out infinite;
+}
+
+/* =============================================================================
+   Topology Layouts
+   ============================================================================= */
+
+/* Hierarchical layout */
+.topology-hierarchical .queen-tier {
+  transform: translateY(-150px);
+}
+
+.topology-hierarchical .coordinator-tier {
+  transform: translateY(-50px);
+}
+
+.topology-hierarchical .worker-tier {
+  transform: translateY(100px);
+}
+
+/* Mesh layout */
+.topology-mesh .agent-node {
+  transition: transform 750ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Ring layout */
+.topology-ring .agent-node {
+  transform-origin: center center;
+}
+
+/* =============================================================================
+   Category Groups
+   ============================================================================= */
+
+.agent-category-group {
+  fill: none;
+  stroke: var(--border-subtle);
+  stroke-width: 1;
+  stroke-dasharray: 6 6;
+  rx: 16;
+  ry: 16;
+  opacity: 0.4;
+  transition: opacity var(--transition-normal);
+}
+
+.agent-category-group:hover {
+  opacity: 0.7;
+  stroke: var(--border-default);
+}
+
+.agent-category-label {
+  fill: var(--text-tertiary);
+  font-size: var(--text-xs);
+  font-family: var(--font-body);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* Category color accents */
+.category-core {
+  stroke: var(--primary-400);
+}
+
+.category-swarm {
+  stroke: var(--accent-400);
+}
+
+.category-consensus {
+  stroke: #8b5cf6;
+}
+
+.category-specialized {
+  stroke: var(--status-busy);
+}
+
+.category-github {
+  stroke: #f472b6;
+}
+
+/* =============================================================================
+   Agent Tooltips
+   ============================================================================= */
+
+.agent-tooltip {
+  position: absolute;
+  z-index: var(--z-tooltip);
+  pointer-events: none;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-xl);
+  padding: var(--space-4);
+  box-shadow: var(--shadow-xl);
+  max-width: 300px;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: all var(--transition-fast);
+}
+
+.agent-tooltip--visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.agent-tooltip-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-3);
+}
+
+.agent-tooltip-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-lg);
+  background-color: var(--bg-darker);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.agent-tooltip-title {
+  font-size: var(--text-sm);
+  font-weight: var(--font-semibold);
+  color: var(--text-primary);
+}
+
+.agent-tooltip-role {
+  font-size: var(--text-xs);
+  color: var(--text-tertiary);
+}
+
+.agent-tooltip-status {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--text-xs);
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-full);
+  background-color: var(--bg-darker);
+}
+
+.agent-tooltip-status--active {
+  color: var(--status-active);
+}
+
+.agent-tooltip-status--idle {
+  color: var(--status-idle);
+}
+
+.agent-tooltip-status--busy {
+  color: var(--status-busy);
+}
+
+.agent-tooltip-capabilities {
+  margin-top: var(--space-3);
+}
+
+.agent-tooltip-capabilities-title {
+  font-size: var(--text-xs);
+  font-weight: var(--font-medium);
+  color: var(--text-tertiary);
+  margin-bottom: var(--space-2);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.agent-tooltip-capability-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+}
+
+.agent-tooltip-capability {
+  font-size: var(--text-xs);
+  color: var(--primary-300);
+  background-color: var(--primary-950);
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-full);
+}
+
+.agent-tooltip-connections {
+  margin-top: var(--space-3);
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--border-subtle);
+}
+
+.agent-tooltip-connections-text {
+  font-size: var(--text-xs);
+  color: var(--text-secondary);
+}
+
+/* =============================================================================
+   Topology Selector
+   ============================================================================= */
+
+.topology-selector {
+  position: absolute;
+  top: var(--space-4);
+  left: var(--space-4);
+  z-index: var(--z-dropdown);
+  display: flex;
+  gap: var(--space-2);
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  padding: var(--space-2);
+}
+
+.topology-option {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--text-xs);
+  font-weight: var(--font-medium);
+  color: var(--text-secondary);
+  border-radius: var(--radius-md);
+  transition: all var(--transition-fast);
+  min-height: 36px;
+}
+
+.topology-option:hover {
+  color: var(--text-primary);
+  background-color: var(--bg-card-hover);
+}
+
+.topology-option--active {
+  color: var(--text-primary);
+  background-color: var(--primary-900);
+}
+
+/* =============================================================================
+   Category Filter
+   ============================================================================= */
+
+.category-filter {
+  position: absolute;
+  top: var(--space-4);
+  right: var(--space-4);
+  z-index: var(--z-dropdown);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  max-width: 280px;
+}
+
+.category-filter-chip {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-1) var(--space-3);
+  font-size: var(--text-xs);
+  font-weight: var(--font-medium);
+  color: var(--text-secondary);
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-full);
+  transition: all var(--transition-fast);
+  min-height: 32px;
+}
+
+.category-filter-chip:hover {
+  color: var(--text-primary);
+  border-color: var(--border-strong);
+}
+
+.category-filter-chip--active {
+  color: var(--text-primary);
+  background-color: var(--primary-900);
+  border-color: var(--primary-500);
+}
+
+.category-filter-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-full);
+}
+
+/* =============================================================================
+   Agent Counter
+   ============================================================================= */
+
+.agent-counter {
+  position: absolute;
+  bottom: var(--space-4);
+  left: var(--space-4);
+  z-index: var(--z-dropdown);
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  padding: var(--space-3) var(--space-4);
+}
+
+.agent-counter-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.agent-counter-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: var(--radius-full);
+}
+
+.agent-counter-dot--active {
+  background-color: var(--status-active);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.agent-counter-dot--idle {
+  background-color: var(--status-idle);
+}
+
+.agent-counter-dot--busy {
+  background-color: var(--status-busy);
+}
+
+.agent-counter-value {
+  font-size: var(--text-sm);
+  font-weight: var(--font-semibold);
+  font-family: var(--font-mono);
+  color: var(--text-primary);
+}
+
+.agent-counter-label {
+  font-size: var(--text-xs);
+  color: var(--text-tertiary);
+}
+
+/* =============================================================================
+   Responsive Adjustments
+   ============================================================================= */
+
+@media (max-width: 767px) {
+  .topology-selector {
+    left: var(--space-2);
+    top: var(--space-2);
+    padding: var(--space-1);
+  }
+
+  .topology-option {
+    padding: var(--space-1) var(--space-2);
+    font-size: 10px;
+  }
+
+  .category-filter {
+    display: none;
+  }
+
+  .agent-counter {
+    left: var(--space-2);
+    bottom: var(--space-2);
+    padding: var(--space-2);
+  }
+
+  .agent-label {
+    font-size: 10px;
+  }
+}
