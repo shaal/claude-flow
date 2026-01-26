@@ -147,7 +147,7 @@ export function useResponsiveLayout(
   const {
     breakpoints: customBreakpoints,
     configs: customConfigs,
-    debounceDelay,
+    debounceDelay: _debounceDelay,
     ssrFallback = 'desktop',
   } = options;
 

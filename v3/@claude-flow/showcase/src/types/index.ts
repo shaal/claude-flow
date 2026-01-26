@@ -2,7 +2,7 @@
 
 export type ViewType = 'overview' | 'topology' | 'stack' | 'agents' | 'metrics' | 'features';
 
-export type TopologyType = 'hierarchical' | 'mesh' | 'hierarchical-mesh' | 'adaptive';
+export type TopologyType = 'hierarchical' | 'mesh' | 'hierarchical-mesh' | 'adaptive' | 'ring' | 'star' | 'radial' | 'grid';
 
 export type NodeType = 'module' | 'agent' | 'service' | 'database';
 
@@ -112,10 +112,12 @@ export interface TopologyLayout {
 }
 
 export interface EdgeStyle {
+  stroke: string;
   strokeWidth: number;
   strokeColor: string;
   animated: boolean;
   dashArray?: string;
+  opacity?: number;
 }
 
 export interface AnimationState {

@@ -53,7 +53,7 @@ export function createForceSimulation<N extends SimulationNode>(
   width: number,
   height: number,
   options: ForceSimulationOptions = {}
-): d3.Simulation<N, Edge> {
+): d3.Simulation<N, d3.SimulationLinkDatum<N>> {
   const {
     centerStrength = 1,
     chargeStrength = -300,
@@ -64,14 +64,20 @@ export function createForceSimulation<N extends SimulationNode>(
     velocityDecay = 0.4,
   } = options;
 
+  // Convert edges to D3-compatible link format
+  const links = edges.map(edge => ({
+    source: typeof edge.source === 'string' ? edge.source : edge.source.id,
+    target: typeof edge.target === 'string' ? edge.target : edge.target.id,
+  }));
+
   const simulation = d3
-    .forceSimulation<N, Edge>(nodes)
+    .forceSimulation<N>(nodes)
     .force('center', d3.forceCenter<N>(width / 2, height / 2).strength(centerStrength))
     .force('charge', d3.forceManyBody<N>().strength(chargeStrength))
     .force(
       'link',
       d3
-        .forceLink<N, Edge>(edges)
+        .forceLink<N, d3.SimulationLinkDatum<N>>(links)
         .id((d) => d.id)
         .distance(linkDistance)
         .strength(linkStrength)
@@ -212,7 +218,6 @@ export function getEdgePath(
   // Curved line using quadratic bezier
   const dx = target.x - source.x;
   const dy = target.y - source.y;
-  const dr = Math.sqrt(dx * dx + dy * dy);
 
   // Calculate control point
   const midX = (source.x + target.x) / 2;
@@ -408,25 +413,32 @@ export function getEdgeStyle(
   type: Edge['type'] = 'uses',
   isHighlighted = false
 ): EdgeStyle {
-  const baseStyles: Record<NonNullable<Edge['type']>, Partial<EdgeStyle>> = {
+  const baseStyles: Record<NonNullable<Edge['type']>, EdgeStyle> = {
     uses: {
       stroke: '#64748b',
+      strokeColor: '#64748b',
       strokeWidth: 1.5,
+      animated: false,
     },
     depends: {
       stroke: '#3b82f6',
+      strokeColor: '#3b82f6',
       strokeWidth: 2,
-      strokeDasharray: '5,5',
+      animated: false,
+      dashArray: '5,5',
     },
     communicates: {
       stroke: '#22c55e',
+      strokeColor: '#22c55e',
       strokeWidth: 2,
       animated: true,
     },
     contains: {
       stroke: '#94a3b8',
+      strokeColor: '#94a3b8',
       strokeWidth: 1,
-      strokeDasharray: '2,2',
+      animated: false,
+      dashArray: '2,2',
     },
   };
 

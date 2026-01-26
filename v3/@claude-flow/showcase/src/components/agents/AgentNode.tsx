@@ -65,8 +65,8 @@ export function AgentNode({
           style={{
             backgroundColor: `${color}20`,
             borderColor: color,
-            ringColor: color,
-          }}
+            '--tw-ring-color': color,
+          } as React.CSSProperties}
         >
           {/* Agent type icon */}
           <span className="text-lg">

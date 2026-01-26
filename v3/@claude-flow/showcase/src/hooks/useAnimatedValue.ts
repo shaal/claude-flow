@@ -6,7 +6,7 @@
  */
 
 import { useState, useEffect, useRef, useCallback } from 'react';
-import type { EasingFunction, AnimationConfig } from '../types';
+import type { EasingFunction } from '../types';
 
 /**
  * Easing function implementations
@@ -58,16 +58,7 @@ export const easings: Record<EasingFunction | string, (t: number) => number> = {
   },
 };
 
-/**
- * Default animation configuration
- */
-const DEFAULT_CONFIG: AnimationConfig = {
-  duration: 1000,
-  easing: 'easeOutCubic',
-  delay: 0,
-  repeat: 0,
-  yoyo: false,
-};
+// Animation configuration is defined inline where needed
 
 /**
  * Hook options for useAnimatedValue

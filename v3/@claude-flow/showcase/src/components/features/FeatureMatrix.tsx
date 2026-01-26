@@ -27,6 +27,7 @@ export function FeatureMatrix() {
           category.features.map((f) => ({
             ...f,
             status: f.status as Feature['status'],
+            category: category.id,
             categoryName: category.name,
           }))
         );

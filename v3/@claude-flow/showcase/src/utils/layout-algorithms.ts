@@ -4,7 +4,7 @@
  * Layout algorithms for positioning nodes in different topologies.
  */
 
-import type { Position, TopologyType, SimulationNode } from '../types';
+import type { Position, TopologyType } from '../types';
 
 // ============================================
 // Types
@@ -491,7 +491,8 @@ export function getLayoutForTopology(
       });
     case 'adaptive':
     default:
-      return randomLayout;
+      return (nodes, width, height, options = { width, height }) =>
+        randomLayout(nodes, width, height, options?.padding ?? 50);
   }
 }
 

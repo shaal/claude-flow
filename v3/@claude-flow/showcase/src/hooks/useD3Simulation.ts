@@ -260,6 +260,14 @@ export function useD3Simulation({
 }
 
 /**
+ * Internal D3 link type
+ */
+interface D3Link {
+  source: string;
+  target: string;
+}
+
+/**
  * Generic simulation hook for custom node types
  */
 export function useGenericD3Simulation<N extends SimulationNode>(
@@ -269,13 +277,21 @@ export function useGenericD3Simulation<N extends SimulationNode>(
   onTick?: (nodes: N[]) => void
 ) {
   const mergedConfig = { ...DEFAULT_CONFIG, ...config };
-  const simulationRef = useRef<d3.Simulation<N, Edge> | null>(null);
+  const simulationRef = useRef<d3.Simulation<N, d3.SimulationLinkDatum<N>> | null>(null);
   const nodesRef = useRef<N[]>(nodes);
   const edgesRef = useRef<Edge[]>(edges);
 
   const [nodePositions, setNodePositions] = useState<Map<string, Position>>(new Map());
   const [isRunning, setIsRunning] = useState(false);
   const [alpha, setAlpha] = useState(1);
+
+  // Convert edges to D3-compatible format
+  const convertEdges = useCallback((edgeList: Edge[]): D3Link[] => {
+    return edgeList.map(edge => ({
+      source: typeof edge.source === 'string' ? edge.source : edge.source.id,
+      target: typeof edge.target === 'string' ? edge.target : edge.target.id,
+    }));
+  }, []);
 
   const updatePositions = useCallback((simNodes: N[]) => {
     const positions = new Map<string, Position>();
@@ -295,14 +311,16 @@ export function useGenericD3Simulation<N extends SimulationNode>(
       simulationRef.current.stop();
     }
 
+    const d3Links = convertEdges(edgesRef.current);
+
     const simulation = d3
-      .forceSimulation<N, Edge>(nodesRef.current)
+      .forceSimulation<N>(nodesRef.current)
       .force('center', d3.forceCenter<N>(width / 2, height / 2).strength(centerForce))
       .force('charge', d3.forceManyBody<N>().strength(chargeForce))
       .force(
         'link',
         d3
-          .forceLink<N, Edge>(edgesRef.current)
+          .forceLink<N, d3.SimulationLinkDatum<N>>(d3Links)
           .id((d) => d.id)
           .strength(linkForce)
       )
@@ -326,7 +344,7 @@ export function useGenericD3Simulation<N extends SimulationNode>(
         simulationRef.current = null;
       }
     };
-  }, [mergedConfig, updatePositions, onTick]);
+  }, [mergedConfig, updatePositions, onTick, convertEdges]);
 
   useEffect(() => {
     nodesRef.current = nodes;
@@ -338,12 +356,12 @@ export function useGenericD3Simulation<N extends SimulationNode>(
   useEffect(() => {
     edgesRef.current = edges;
     if (simulationRef.current) {
-      const linkForce = simulationRef.current.force<d3.ForceLink<N, Edge>>('link');
+      const linkForce = simulationRef.current.force<d3.ForceLink<N, d3.SimulationLinkDatum<N>>>('link');
       if (linkForce) {
-        linkForce.links(edges);
+        linkForce.links(convertEdges(edges));
       }
     }
-  }, [edges]);
+  }, [edges, convertEdges]);
 
   const reheat = useCallback((alphaValue = 0.3) => {
     if (simulationRef.current) {

@@ -53,7 +53,7 @@ export function TechStackLayers() {
           />
         )}
 
-        {techStackData.layers.map((layer, index) => (
+        {techStackData.layers.map((layer) => (
           <motion.div
             key={layer.id}
             variants={staggerItemVariants}

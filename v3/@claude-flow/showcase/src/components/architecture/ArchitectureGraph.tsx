@@ -4,9 +4,8 @@ import * as d3 from 'd3';
 import { useVisualizationStore } from '../../store/visualizationStore';
 import { useResponsiveLayout } from '../../hooks/useResponsiveLayout';
 import { NodeDetail } from './NodeDetail';
-import { ConnectionLine } from './ConnectionLine';
 import architectureData from '../../data/architecture.json';
-import type { ArchitectureNode, Connection } from '../../types';
+import type { ArchitectureNode } from '../../types';
 import { staggerContainerVariants } from '../../utils/animation-presets';
 
 interface SimNode extends d3.SimulationNodeDatum {
@@ -103,7 +102,7 @@ export function ArchitectureGraph() {
       .append('g')
       .attr('class', 'node')
       .style('cursor', 'pointer')
-      .on('click', (event, d) => handleNodeClick(d))
+      .on('click', (_event, d) => handleNodeClick(d))
       .call(
         d3
           .drag<SVGGElement, SimNode>()
